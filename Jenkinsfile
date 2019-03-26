@@ -27,7 +27,7 @@ pipeline {
 		branch 'master'
 	    }
 	    steps {
-		sh "./jenkins/script/deploy_master.sh"
+		sh "./jenkins/scripts/deploy_master.sh"
 	    }
 	}
 
