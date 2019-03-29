@@ -15,6 +15,11 @@ pipeline {
 	stage('Test') {
 	    steps {
 	        sh "mvn test"
+	    }	
+	    post {
+		always {
+		step([$class: 'CoberturaPublisher', autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '**/coverage.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
+	   	}
 	    }
 	}
         stage('Deliver') {
