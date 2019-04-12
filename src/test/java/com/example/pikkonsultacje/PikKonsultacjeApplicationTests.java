@@ -1,5 +1,6 @@
 package com.example.pikkonsultacje;
 
+import com.example.pikkonsultacje.Controller.RegisterAndLoginController;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,11 +13,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class PikKonsultacjeApplicationTests {
 
 	@Autowired
-	MyRestController myRestController;
+    RegisterAndLoginController registerAndLoginController;
 
 	@Test
 	public void contextLoads() {
-		Assert.assertEquals("Index", myRestController.getIndex());
+		Assert.assertEquals("Index", registerAndLoginController.getIndex());
 	}
 
 }
