@@ -1,26 +1,34 @@
 package com.example.pikkonsultacje;
 
 
+import com.example.pikkonsultacje.Dao.ConsultationRepository;
 import com.example.pikkonsultacje.Dao.Dao;
+import com.example.pikkonsultacje.Dao.UserRepository;
 import com.example.pikkonsultacje.Entity.User;
 import com.example.pikkonsultacje.Enum.Role;
 import com.example.pikkonsultacje.Service.RegisterAndLoginService;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+@SpringBootTest
 public class ServiceTests {
 
     private RegisterAndLoginService service;
     private User user;
+    @MockBean
+    UserRepository userRepository;
+    @MockBean
+    ConsultationRepository consultationRepository;
 
     @Before
     public void setUp(){
-        Dao dao = new Dao();
-        service = new RegisterAndLoginService(dao);
+        service = new RegisterAndLoginService(userRepository, consultationRepository);
     }
 
     @Test
@@ -35,17 +43,5 @@ public class ServiceTests {
         }
     }
 
-    @Test
-    public void throwExceptionWhenUsernameIsAlreadyUsed(){
-        user = new User("1", "id", "passwd", true, Role.STUDENT);
-        try {
-            service.registerUser(user);
-            service.registerUser(user);
-            fail("Expected exception to be thrown");
-        } catch (Exception e) {
-            assertThat(e.getMessage(), is("Username is already used!"));
-        }
 
-
-    }
 }

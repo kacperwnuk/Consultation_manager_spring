@@ -2,7 +2,9 @@ package com.example.pikkonsultacje.Entity;
 
 import com.example.pikkonsultacje.Enum.Role;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "Users")
 public class User {
 
     @Id

@@ -1,20 +1,20 @@
 package com.example.pikkonsultacje.Service.Security;
 
-import com.example.pikkonsultacje.Dao.Dao;
+import com.example.pikkonsultacje.Dao.UserRepository;
 import com.example.pikkonsultacje.Entity.User;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private Dao dao;
+    private UserRepository dao;
 
-    public UserServiceImpl(Dao dao){
+    public UserServiceImpl(UserRepository dao){
         this.dao = dao;
     }
 
     @Override
     public User findByUsername(String username) {
-        return dao.findUserByUsername(username);
+        return dao.findByUsername(username);
     }
 }

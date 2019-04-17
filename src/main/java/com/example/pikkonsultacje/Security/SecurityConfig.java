@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 
 /***
@@ -25,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     private RequestAwareAuthenticationSuccessHandler mySuccessHandler;
     private AuthenticationProvider authenticationProvider;
+    private AuthenticationFailureHandler myFailureHandler;
 
     @Autowired
     @Qualifier("daoAuthenticationProvider")
@@ -70,6 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .successHandler(mySuccessHandler)
+                .failureHandler(myFailureHandler)
                 .and()
                 .logout()
                 .and()

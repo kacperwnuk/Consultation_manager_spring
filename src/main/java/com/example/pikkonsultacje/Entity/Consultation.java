@@ -1,29 +1,30 @@
 package com.example.pikkonsultacje.Entity;
 
-
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
+@Document(collection="Consultations")
 public class Consultation {
 
     @Id
     private String id;
-    private String tutorId;
-    private String studentId;
-    private Calendar date;
-    private Calendar consultationStartTime;
-    private Calendar consultationEndTime;
+    private User tutor;
+    private User student;
+    private LocalDateTime date;
+    private LocalDateTime consultationStartTime;
+    private LocalDateTime consultationEndTime;
     private String room;
 
     public Consultation(){
 
     }
 
-    public Consultation(String id, String tutorId, String studentId, Calendar date, Calendar consultationStartTime, Calendar consultationEndTime, String room) {
+    public Consultation(String id, User tutor, User student, LocalDateTime date, LocalDateTime consultationStartTime, LocalDateTime consultationEndTime, String room) {
         this.id = id;
-        this.tutorId = tutorId;
-        this.studentId = studentId;
+        this.tutor = tutor;
+        this.student = student;
         this.date = date;
         this.consultationStartTime = consultationStartTime;
         this.consultationEndTime = consultationEndTime;
@@ -38,43 +39,43 @@ public class Consultation {
         this.id = id;
     }
 
-    public String getTutorId() {
-        return tutorId;
+    public User getTutor() {
+        return tutor;
     }
 
-    public void setTutorId(String tutorId) {
-        this.tutorId = tutorId;
+    public void setTutor(User tutor) {
+        this.tutor = tutor;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public User getStudent() {
+        return student;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setStudent(User student) {
+        this.student = student;
     }
 
-    public Calendar getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    public Calendar getConsultationStartTime() {
+    public LocalDateTime getConsultationStartTime() {
         return consultationStartTime;
     }
 
-    public void setConsultationStartTime(Calendar consultationStartTime) {
+    public void setConsultationStartTime(LocalDateTime consultationStartTime) {
         this.consultationStartTime = consultationStartTime;
     }
 
-    public Calendar getConsultationEndTime() {
+    public LocalDateTime getConsultationEndTime() {
         return consultationEndTime;
     }
 
-    public void setConsultationEndTime(Calendar consultationEndTime) {
+    public void setConsultationEndTime(LocalDateTime consultationEndTime) {
         this.consultationEndTime = consultationEndTime;
     }
 
@@ -92,8 +93,8 @@ public class Consultation {
     public String toString() {
         return "Consultation{" +
                 "id='" + id + '\'' +
-                ", tutorId='" + tutorId + '\'' +
-                ", studentId='" + studentId + '\'' +
+                ", tutor='" + tutor + '\'' +
+                ", student='" + student + '\'' +
                 ", date=" + date +
                 ", consultationStartTime=" + consultationStartTime +
                 ", consultationEndTime=" + consultationEndTime +
