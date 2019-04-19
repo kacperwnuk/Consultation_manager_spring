@@ -32,6 +32,8 @@ pipeline {
                 branch 'development'
             }
             steps {
+                sh "cp /home/mzyzynsk/tomcat-conf/server.xml target/server.xml"
+                sh "cp /home/mzyzynsk/tomcat-conf/keystore.p12 target/keystore.p12"
                 sh "/home/mzyzynsk/jenkins/scripts/deploy_master.sh"
             }
         }
