@@ -6,6 +6,6 @@ COPY /target/server.xml /usr/local/tomcat/conf/server.xml
 
 COPY /target/server.xml /usr/local/tomcat/conf/web.xml
 
-COPY /target/keystore.p12 /usr/local/tomcat/conf/pik-server.p12
+COPY /target/pik-server.p12 /usr/local/tomcat/conf/pik-server.p12
 
 
