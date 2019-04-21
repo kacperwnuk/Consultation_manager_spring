@@ -34,7 +34,7 @@ pipeline {
             steps {
                 sh "cp /home/mzyzynsk/tomcat-conf/server.xml target/server.xml"
                 sh "cp /home/mzyzynsk/tomcat-conf/web.xml target/web.xml"
-                sh "cp /home/mzyzynsk/tomcat-conf/keystore.p12 target/keystore.p12"
+                sh "cp /home/mzyzynsk/tomcat-conf/pik-server.p12 target/pik-server.p12"
                 sh "/home/mzyzynsk/jenkins/scripts/deploy_master.sh"
             }
         }
