@@ -1,33 +1,25 @@
 package com.example.pikkonsultacje.Controller;
 
 import com.example.pikkonsultacje.Dao.ConsultationDao;
-import com.example.pikkonsultacje.Dao.ConsultationService;
+import com.example.pikkonsultacje.Enum.Status;
+import com.example.pikkonsultacje.Service.ConsultationService;
 import com.example.pikkonsultacje.Entity.Consultation;
-import com.example.pikkonsultacje.Entity.User;
-import com.example.pikkonsultacje.Enum.Role;
-import com.example.pikkonsultacje.Service.RegisterAndLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 public class ConsultationController {
-
-    private RegisterAndLoginService service;
 
     private ConsultationDao consultationDao;
 
     private ConsultationService consultationService;
 
     @Autowired
-    ConsultationController(RegisterAndLoginService registerAndLoginService,
-                           ConsultationDao consultationDao, ConsultationService consultationService) {
-        this.service = registerAndLoginService;
+    ConsultationController(ConsultationDao consultationDao, ConsultationService consultationService) {
         this.consultationDao = consultationDao;
         this.consultationService = consultationService;
     }
@@ -46,22 +38,15 @@ public class ConsultationController {
         return new ResponseEntity<>(consultations, HttpStatus.OK);
     }
 
-    //test
-    @GetMapping("/consultation")
-    public ResponseEntity<Consultation> getCons() {
-        return new ResponseEntity<>(new Consultation("1", new User("4", "tomek", new BCryptPasswordEncoder().encode("admin"), true, Role.STUDENT), new User("5", "Franek", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusHours(2), "101"), HttpStatus.OK);
-    }
-
     /***
      * Adding new consultation to db
      * @param consultation
      * @return
      */
     @PostMapping("/consultation")
-    public ResponseEntity<String> addConsultation(@RequestBody Consultation consultation) {
-//        service.addConsultation(new Consultation("1", new User("4", "tomek", new BCryptPasswordEncoder().encode("admin"), true, Role.STUDENT), new User("5", "Franek", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusHours(2), "101"));
-//        service.addConsultation(new Consultation("2", new User("4", "tomek", new BCryptPasswordEncoder().encode("admin"), true, Role.STUDENT), new User("5", "Franek", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusHours(2), "101"));
-        service.addConsultation(consultation);
+    public ResponseEntity<String> addConsultation(@RequestBody Consultation consultation, @RequestParam String tutorUsername) {
+        consultation.setStatus(Status.FREE);
+        consultationService.addConsultation(consultation, tutorUsername);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
@@ -75,5 +60,19 @@ public class ConsultationController {
         }
     }
 
+    @GetMapping("/cancelConsultation")
+    public ResponseEntity<Boolean> cancelConsultation(@RequestParam String consultationId, @RequestParam String username) {
+        boolean status = consultationService.cancelConsultation(consultationId, username);
+        if (status) {
+            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    @GetMapping("/freeConsultations")
+    public ResponseEntity<List<Consultation>> getFreeConsultations() {
+        List<Consultation> consultations = consultationDao.findFreeConsultations();
+        return new ResponseEntity<>(consultations, HttpStatus.OK);
+    }
 }

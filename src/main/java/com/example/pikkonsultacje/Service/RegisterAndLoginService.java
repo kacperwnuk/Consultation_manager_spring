@@ -1,23 +1,17 @@
 package com.example.pikkonsultacje.Service;
 
-
-import com.example.pikkonsultacje.Dao.ConsultationRepository;
 import com.example.pikkonsultacje.Dao.UserRepository;
-import com.example.pikkonsultacje.Entity.Consultation;
 import com.example.pikkonsultacje.Entity.User;
 import com.example.pikkonsultacje.Enum.Role;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class RegisterAndLoginService {
 
     private UserRepository userRepository;
-    private ConsultationRepository consultationRepository;
 
-    public RegisterAndLoginService(UserRepository userRepository, ConsultationRepository consultationRepository) {
+    public RegisterAndLoginService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.consultationRepository = consultationRepository;
     }
 
     public void registerUser(User user) throws Exception {
@@ -43,9 +37,5 @@ public class RegisterAndLoginService {
         if (role == null) {
             throw new Exception("There is no user with this login!");
         } else return role;
-    }
-
-    public void addConsultation(Consultation consultation) {
-        consultationRepository.insert(consultation);
     }
 }

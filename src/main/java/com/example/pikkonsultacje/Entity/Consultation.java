@@ -1,5 +1,6 @@
 package com.example.pikkonsultacje.Entity;
 
+import com.example.pikkonsultacje.Enum.Status;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,8 @@ public class Consultation {
 
     private String room;
 
+    private Status status = Status.FREE;
+
     @Override
     public String toString() {
         return "Consultation{" +
@@ -43,6 +46,21 @@ public class Consultation {
                 ", consultationEndTime=" + consultationEndTime +
                 ", room=" + room +
                 '}';
+    }
+
+    public boolean reserve(User user) {
+        if (student == null ) {
+            status = Status.RESERVED;
+            student = user;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void free() {
+        student = null;
+        status = Status.FREE;
     }
 
 

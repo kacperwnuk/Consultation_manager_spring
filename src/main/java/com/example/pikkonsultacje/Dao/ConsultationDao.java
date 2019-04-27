@@ -2,6 +2,7 @@ package com.example.pikkonsultacje.Dao;
 
 import com.example.pikkonsultacje.Entity.Consultation;
 import com.example.pikkonsultacje.Entity.User;
+import com.example.pikkonsultacje.Enum.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +34,19 @@ public class ConsultationDao {
         return consultationRepository.findById(id);
     }
 
-    public void insert(Consultation consultation) {
+    public void insertConsultation(Consultation consultation) {
         consultationRepository.insert(consultation);
+    }
+
+    public void updateConsultation(Consultation consultation) {
+        consultationRepository.save(consultation);
+    }
+
+    public void deleteConsultation(Consultation consultation) {
+        consultationRepository.delete(consultation);
+    }
+
+    public List<Consultation> findFreeConsultations() {
+        return consultationRepository.findByStatus(Status.FREE);
     }
 }
