@@ -1,6 +1,7 @@
 package com.example.pikkonsultacje.Controller;
 
 import com.example.pikkonsultacje.Dao.ConsultationDao;
+import com.example.pikkonsultacje.Dao.ConsultationService;
 import com.example.pikkonsultacje.Entity.Consultation;
 import com.example.pikkonsultacje.Entity.User;
 import com.example.pikkonsultacje.Enum.Role;
@@ -21,11 +22,14 @@ public class ConsultationController {
 
     private ConsultationDao consultationDao;
 
+    private ConsultationService consultationService;
+
     @Autowired
     ConsultationController(RegisterAndLoginService registerAndLoginService,
-                           ConsultationDao consultationDao) {
+                           ConsultationDao consultationDao, ConsultationService consultationService) {
         this.service = registerAndLoginService;
         this.consultationDao = consultationDao;
+        this.consultationService = consultationService;
     }
 
     @GetMapping("/consultation/{studentUsername}")
@@ -59,6 +63,16 @@ public class ConsultationController {
 //        service.addConsultation(new Consultation("2", new User("4", "tomek", new BCryptPasswordEncoder().encode("admin"), true, Role.STUDENT), new User("5", "Franek", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusHours(2), "101"));
         service.addConsultation(consultation);
         return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @GetMapping("/reserveConsultation")
+    public ResponseEntity<Boolean> reserveConsultation(@RequestParam String consultationId, @RequestParam String username) {
+        boolean status = consultationService.reserveConsultation(consultationId, username);
+        if (status) {
+            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.BAD_REQUEST);
+        }
     }
 
 

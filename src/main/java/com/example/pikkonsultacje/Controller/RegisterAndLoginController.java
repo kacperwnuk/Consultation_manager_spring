@@ -57,7 +57,6 @@ public class RegisterAndLoginController {
         return new ResponseEntity<>(user.toString(), HttpStatus.OK);
     }
 
-
     //test
     @GetMapping("/register")
     public ResponseEntity<User> showUser() {
