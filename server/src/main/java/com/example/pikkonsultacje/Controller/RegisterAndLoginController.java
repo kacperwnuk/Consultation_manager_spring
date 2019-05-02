@@ -49,11 +49,11 @@ public class RegisterAndLoginController {
     public ResponseEntity<User> addUser(@RequestBody User user) {
         System.out.println("Wykonanie rejestracji uzytkownika:" + user);
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        /*try {
+        try {
             service.registerUser(user);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-        }*/
+        }
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
