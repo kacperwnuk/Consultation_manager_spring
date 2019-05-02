@@ -1,93 +1,39 @@
 package com.example.pikkonsultacje.Entity;
 
+import com.example.pikkonsultacje.Enum.Status;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Document(collection="Consultations")
+@Data
+@AllArgsConstructor
+@Document(collection = "Consultations")
 public class Consultation {
 
     @Id
     private String id;
+
     private User tutor;
+
     private User student;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime date;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime consultationStartTime;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime consultationEndTime;
+
     private String room;
 
-    public Consultation(){
-
-    }
-
-    public Consultation(String id, User tutor, User student, LocalDateTime date, LocalDateTime consultationStartTime, LocalDateTime consultationEndTime, String room) {
-        this.id = id;
-        this.tutor = tutor;
-        this.student = student;
-        this.date = date;
-        this.consultationStartTime = consultationStartTime;
-        this.consultationEndTime = consultationEndTime;
-        this.room = room;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public User getTutor() {
-        return tutor;
-    }
-
-    public void setTutor(User tutor) {
-        this.tutor = tutor;
-    }
-
-    public User getStudent() {
-        return student;
-    }
-
-    public void setStudent(User student) {
-        this.student = student;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public LocalDateTime getConsultationStartTime() {
-        return consultationStartTime;
-    }
-
-    public void setConsultationStartTime(LocalDateTime consultationStartTime) {
-        this.consultationStartTime = consultationStartTime;
-    }
-
-    public LocalDateTime getConsultationEndTime() {
-        return consultationEndTime;
-    }
-
-    public void setConsultationEndTime(LocalDateTime consultationEndTime) {
-        this.consultationEndTime = consultationEndTime;
-    }
-
-
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
-    }
-
+    private Status status = Status.FREE;
 
     @Override
     public String toString() {
@@ -100,6 +46,21 @@ public class Consultation {
                 ", consultationEndTime=" + consultationEndTime +
                 ", room=" + room +
                 '}';
+    }
+
+    public boolean reserve(User user) {
+        if (student == null ) {
+            status = Status.RESERVED;
+            student = user;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void free() {
+        student = null;
+        status = Status.FREE;
     }
 
 

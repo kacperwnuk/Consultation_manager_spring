@@ -1,28 +1,25 @@
 package com.example.pikkonsultacje.Controller;
 
-import com.example.pikkonsultacje.Entity.Consultation;
 import com.example.pikkonsultacje.Entity.User;
 import com.example.pikkonsultacje.Enum.Role;
 import com.example.pikkonsultacje.Service.RegisterAndLoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.security.Principal;
-import java.time.LocalDateTime;
-
 
 @RestController
 public class RegisterAndLoginController {
 
     private RegisterAndLoginService service;
 
+    @Autowired
     RegisterAndLoginController(RegisterAndLoginService registerAndLoginService) {
         this.service = registerAndLoginService;
     }
-
 
     /***
      * If login and passwd ok then sends user role.
@@ -30,7 +27,7 @@ public class RegisterAndLoginController {
      * @return User role.
      */
     @GetMapping("/login")
-    public ResponseEntity<String> login(Principal principal){
+    public ResponseEntity<String> login(Principal principal) {
 
         Role userRole;
         try {
@@ -40,23 +37,6 @@ public class RegisterAndLoginController {
         }
 
         return new ResponseEntity<>(userRole.toString(), HttpStatus.OK);
-    }
-
-    //test
-    @GetMapping("/consultation")
-    public ResponseEntity<Consultation> getCons(){
-        return new ResponseEntity<>(new Consultation("1", new User("4", "tomek", new BCryptPasswordEncoder().encode("admin"), true, Role.STUDENT), new User("5", "Franek", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusHours(2), "101"), HttpStatus.OK);
-    }
-
-    /***
-     * Adding new consultation to db
-     * @param consultation
-     * @return
-     */
-    @PostMapping("/consultation")
-    public ResponseEntity<String> addConsultation(@RequestBody Consultation consultation){
-        service.addConsultation(consultation);
-        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     /***
@@ -78,7 +58,6 @@ public class RegisterAndLoginController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-
     //test
     @GetMapping("/register")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -86,7 +65,6 @@ public class RegisterAndLoginController {
         System.out.println("Wykonanie wyslania");
         return new ResponseEntity<>(new User("1", "kacper123", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT), HttpStatus.OK);
     }
-
 
     //test
     @RequestMapping("/index")

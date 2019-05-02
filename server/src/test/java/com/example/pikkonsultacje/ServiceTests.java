@@ -1,11 +1,8 @@
 package com.example.pikkonsultacje;
 
 
-import com.example.pikkonsultacje.Dao.ConsultationRepository;
-import com.example.pikkonsultacje.Dao.Dao;
 import com.example.pikkonsultacje.Dao.UserRepository;
 import com.example.pikkonsultacje.Entity.User;
-import com.example.pikkonsultacje.Enum.Role;
 import com.example.pikkonsultacje.Service.RegisterAndLoginService;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,12 +20,10 @@ public class ServiceTests {
     private User user;
     @MockBean
     UserRepository userRepository;
-    @MockBean
-    ConsultationRepository consultationRepository;
 
     @Before
     public void setUp(){
-        service = new RegisterAndLoginService(userRepository, consultationRepository);
+        service = new RegisterAndLoginService(userRepository);
     }
 
     @Test
