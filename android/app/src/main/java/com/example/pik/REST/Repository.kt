@@ -1,0 +1,180 @@
+package com.example.pik.REST
+
+import android.content.Context
+import android.os.AsyncTask.execute
+import com.example.pik.REST.entity.Consultation
+import com.example.pik.REST.entity.User
+import com.fasterxml.jackson.databind.ObjectMapper
+import java.io.BufferedReader
+import java.io.DataOutputStream
+import java.io.InputStreamReader
+import java.net.URL
+import java.security.KeyManagementException
+import java.security.KeyStore
+import java.security.NoSuchAlgorithmException
+import java.security.cert.CertificateFactory
+import java.util.concurrent.Callable
+import java.util.concurrent.FutureTask
+import javax.net.ssl.*
+
+
+class Repository(context: Context) {
+
+    //    private val endpointUrl = "https://192.168.0.11:8443"
+    private val endpointUrl = "https://192.168.1.16:8443"
+
+    init {
+        val certificateFactory = CertificateFactory.getInstance("X.509")
+        val inputStream = context.resources.openRawResource(com.example.pik.R.raw.pikca)
+        val certificate = certificateFactory.generateCertificate(inputStream)
+        val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+        val ks = KeyStore.getInstance(KeyStore.getDefaultType())
+        ks.load(null)
+        ks.setCertificateEntry("caCert", certificate)
+        tmf.init(ks)
+        var sc: SSLContext? = null
+        try {
+            sc = SSLContext.getInstance("SSL")
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        }
+        try {
+            sc!!.init(null, tmf.trustManagers, java.security.SecureRandom())
+        } catch (e: KeyManagementException) {
+            e.printStackTrace()
+        }
+        val validHosts = object : HostnameVerifier {
+            override fun verify(arg0: String, arg1: SSLSession): Boolean {
+                return true
+            }
+        }
+        // All hosts will be valid
+        HttpsURLConnection.setDefaultHostnameVerifier(validHosts)
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc!!.socketFactory)
+    }
+
+    inline fun <reified T> getItem(uri: String): FutureTask<T?> =
+        getItem(T::class.java, uri)
+
+    fun <T> getItem(cls: Class<T>, uri: String): FutureTask<T?> {
+        val future = FutureTask(Callable {
+            try {
+                val url = URL("$endpointUrl$uri")
+                val myConnection = url.openConnection() as HttpsURLConnection
+                myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
+                myConnection.requestMethod = "GET"
+                myConnection.setRequestProperty("Accept", "application/json")
+
+                if (myConnection.responseCode == 200) {
+                    val responseBody = myConnection.inputStream
+                    val responseBodyReader = InputStreamReader(responseBody, "UTF-8")
+                    val json = responseBodyReader.readText()
+                    ObjectMapper().readValue(json, cls)
+                } else {
+                    null
+                }
+            } catch (e: Exception) {
+                throw e
+            }
+        })
+
+        execute(future)
+        return future
+    }
+
+    inline fun <reified T> getList(uri: String): FutureTask<List<T>> =
+        getList(T::class.java, uri)
+
+    fun <L> getList(type: Class<L>, uri: String): FutureTask<List<L>> {
+        val future = FutureTask(Callable<List<L>> {
+            try {
+                val url = URL("$endpointUrl$uri")
+                val myConnection = url.openConnection() as HttpsURLConnection
+                myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
+                myConnection.requestMethod = "GET"
+                myConnection.setRequestProperty("Accept", "application/json")
+
+                if (myConnection.responseCode == 200) {
+                    val responseBody = myConnection.inputStream
+                    val responseBodyReader = InputStreamReader(responseBody, "UTF-8")
+                    val json = responseBodyReader.readText()
+                    val objectMapper = ObjectMapper()
+                    objectMapper.readValue(
+                        json,
+                        objectMapper.typeFactory.constructCollectionType(List::class.java, type)
+                    )
+                } else {
+                    listOf()
+                }
+            } catch (e: Exception) {
+                throw e
+            }
+        })
+        execute(future)
+        return future
+    }
+
+    fun getFreeConsultations(): FutureTask<List<Consultation>> {
+        try {
+            return getList("/freeConsultations")
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    fun reserveConsultation(id: String, username: String): FutureTask<Boolean?> {
+        try {
+            return getItem("/reserveConsultation?consultationId=$id&username=$username")
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    fun cancelConsultation(id: String, username: String): FutureTask<Boolean?> {
+        try {
+            return getItem("/cancelConsultation?consultationId=$id&username=$username")
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    fun getReservedConsultations(username: String): FutureTask<List<Consultation>> {
+        try {
+            return getList("/consultation/$username")
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    fun register(user: User): Boolean {
+        try {
+            val url = URL("$endpointUrl/register")
+            val myConnection = url.openConnection() as HttpsURLConnection
+            myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
+            myConnection.requestMethod = "POST"
+            myConnection.setRequestProperty("Accept", "application/json")
+            myConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+            myConnection.doOutput = true
+            val wr = DataOutputStream(myConnection.outputStream)
+            wr.writeBytes(ObjectMapper().writeValueAsString(user))
+            wr.flush()
+            wr.close()
+            val responseCode = myConnection.responseCode
+            if (responseCode == 200) {
+                val `in` = BufferedReader(InputStreamReader(myConnection.inputStream))
+                var inputLine = `in`.readLine()
+                val response = StringBuffer()
+
+                while (inputLine != null) {
+                    inputLine = `in`.readLine()
+                    response.append(inputLine)
+                }
+                `in`.close()
+                return true
+            }
+            return false
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+}
