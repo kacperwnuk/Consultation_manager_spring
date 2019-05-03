@@ -6,8 +6,12 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="consultation_reservation">Zarezerwuj</string>
-    <string name="consultation_cancelation">Odwołaj</string>
+    <string name="consultation_reservation_button">Reserve</string>
+    <string name="consultation_cancelation_button">Cancel</string>
+    <string name="consultation_reservation_title">"Reserve consultation"</string>
+    <string name="my_consultations_title">My consultations</string>
+    <string name="suggest_consultation_title">Suggest consultation</string>
+    <string name="no_consultations_message">You\'ve got no reserved consultations</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

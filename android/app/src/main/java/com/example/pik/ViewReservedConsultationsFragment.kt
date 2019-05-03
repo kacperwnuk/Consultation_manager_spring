@@ -73,27 +73,32 @@ class ViewReservedConsultationsFragment : Fragment(),
         }
     }
 
-    private class MyAsyncTask internal constructor(context: Context, actionListener: ViewReservedConsultationsFragment): AsyncTask<Void, Void, MyBookedConsultationsRecyclerAdapter>() {
+    private class MyAsyncTask internal constructor(context: Context, actionListener: ViewReservedConsultationsFragment): AsyncTask<Void, Void, RecyclerView.Adapter<RecyclerView.ViewHolder>>() {
 
         private val context: WeakReference<Context> = WeakReference(context)
         private val actionListener: WeakReference<ViewReservedConsultationsFragment> = WeakReference(actionListener)
 
-        override fun doInBackground(vararg params: Void): MyBookedConsultationsRecyclerAdapter {
+        override fun doInBackground(vararg params: Void): RecyclerView.Adapter<RecyclerView.ViewHolder> {
             val consultations = try {
                 val repository = Repository(context.get()!!)
                 repository.getReservedConsultations((context.get() as MainActivity).credential!!.id).get()
             } catch (e: Exception) {
                 listOf<Consultation>()
             }
-            return MyBookedConsultationsRecyclerAdapter(consultations.sortedWith (compareBy ({it.date}, {it.consultationStartTime})), actionListener.get()!!)
+            return if (consultations.isNotEmpty()) {
+                return MyBookedConsultationsRecyclerAdapter(consultations.sortedWith (compareBy ({it.date}, {it.consultationStartTime})), actionListener.get()!!)
+            } else {
+                NoConsultationsRecyclerAdapter()
+            }
+
         }
 
-        override fun onPostExecute(result: MyBookedConsultationsRecyclerAdapter) {
+        override fun onPostExecute(result: RecyclerView.Adapter<RecyclerView.ViewHolder>) {
             actionListener.get()!!.updateView(result)
         }
     }
 
-    fun updateView(result: MyBookedConsultationsRecyclerAdapter) {
+    fun updateView(result: RecyclerView.Adapter<RecyclerView.ViewHolder>) {
         view!!.recyclerView.apply {
             setHasFixedSize(true)
             adapter = result

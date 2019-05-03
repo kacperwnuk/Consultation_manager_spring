@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = "Reserve consultation"
+        supportActionBar!!.title = getString(R.string.consultation_reservation_title)
 
         reserveConsultationFragment = ReserveConsultationFragment.newInstance("", "")
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, reserveConsultationFragment).commit()
@@ -78,14 +78,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 reserveConsultationFragment = ReserveConsultationFragment.newInstance("", "")
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, reserveConsultationFragment)
                     .addToBackStack(null).commit()
-                supportActionBar!!.title = "Reserve consultation"
+                supportActionBar!!.title = getString(R.string.consultation_reservation_title)
             }
             R.id.my_consultations -> {
                 viewReservedConsultationsFragment = ViewReservedConsultationsFragment.newInstance()
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, viewReservedConsultationsFragment)
                     .addToBackStack(null).commit()
-                supportActionBar!!.title = "My consultations"
+                supportActionBar!!.title = getString(R.string.my_consultations_title)
             }
             R.id.settings -> {
 
