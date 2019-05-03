@@ -9,14 +9,16 @@ pipeline {
     stages {
         stage('Build backend') {
             steps {
-				sh "cd server"
-                sh "mvn -DskipTests clean install"
-				sh "cd .."
+				dir ('server') {
+					sh "mvn -DskipTests clean install"
+				}
             }
         }
         stage('Test') {
             steps {
+				dir ('server') {
                 sh "mvn test"
+				}
             }
             post {
                 always {
@@ -42,9 +44,9 @@ pipeline {
                 branch 'development'
             }
             steps {
-				sh "cd angular"
+				dir ('angular') {
                 sh "/home/mzyzynsk/jenkins/scripts/deploy_frontend.sh"
-				sh "cd .."
+				}
             }
         }
     }
