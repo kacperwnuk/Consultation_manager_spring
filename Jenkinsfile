@@ -17,7 +17,7 @@ pipeline {
         stage('Test') {
             steps {
 				dir ('server') {
-                sh "mvn test"
+					sh "mvn test"
 				}
             }
             post {
@@ -36,7 +36,9 @@ pipeline {
                 branch 'development'
             }
             steps {
-                sh "/home/mzyzynsk/jenkins/scripts/deploy_backend.sh"
+				dir ('server') {
+					sh "/home/mzyzynsk/jenkins/scripts/deploy_backend.sh"
+				}
             }
         }
 		stage('Deploy frontend') {
@@ -45,7 +47,7 @@ pipeline {
             }
             steps {
 				dir ('angular') {
-                sh "/home/mzyzynsk/jenkins/scripts/deploy_frontend.sh"
+					sh "/home/mzyzynsk/jenkins/scripts/deploy_frontend.sh"
 				}
             }
         }
