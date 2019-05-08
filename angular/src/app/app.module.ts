@@ -1,24 +1,39 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { ToastrModule } from 'ngx-toastr';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
-import { RegisteredPageComponent } from './registered/registered-page/registered-page.component';
+import { LoginModule } from './login/login.module';
+import { CoreModule } from './core/core.module';
+import { StandardLoginComponent } from './login/standard-login/standard-login.component';
+import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
+import { MainRegisteredComponent } from './rejestration/main-registered/main-registered.component';
+import { RejestrationModule } from './rejestration/rejestration.module';
+import { LogowanieComponent } from './login/logowanie/logowanie.component';
+
+const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch:'full' },
+
+];
 
 @NgModule({
   declarations: [
     AppComponent,
-    RegisteredPageComponent
-  ],
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RouterModule,
+    RouterModule.forRoot(routes),
     HttpClientModule,
-    FormsModule
+    ToastrModule.forRoot(),
+    LoginModule,
+    CoreModule,
+    RejestrationModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
