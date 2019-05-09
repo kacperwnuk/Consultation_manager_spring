@@ -27,8 +27,7 @@ public class RegisterAndLoginService {
     }
 
     private Boolean usernameAlreadyUsed(String username) {
-        User user = userRepository.findByUsername(username).get();
-        return user != null;
+        return userRepository.findByUsername(username).isPresent();
     }
 
     public Role getUserRole(String login) throws Exception {
