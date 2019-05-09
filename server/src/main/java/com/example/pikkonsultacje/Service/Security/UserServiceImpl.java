@@ -4,6 +4,8 @@ import com.example.pikkonsultacje.Dao.UserRepository;
 import com.example.pikkonsultacje.Entity.User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -14,7 +16,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
+    public Optional<User> findByUsername(String username) {
         return dao.findByUsername(username);
     }
 }
