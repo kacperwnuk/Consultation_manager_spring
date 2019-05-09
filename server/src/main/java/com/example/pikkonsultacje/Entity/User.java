@@ -21,7 +21,7 @@ public class User {
 
     private String username;
     private String password;
-    private Boolean enabled = false;
+    private Boolean enabled = true;
     private Role role;
 
     public User(String id, String username, String password, Boolean enabled, Role role) {
