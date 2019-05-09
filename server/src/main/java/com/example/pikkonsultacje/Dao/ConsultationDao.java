@@ -6,6 +6,7 @@ import com.example.pikkonsultacje.Enum.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +27,12 @@ public class ConsultationDao {
     }
 
     public List<Consultation> findStudentsConsultationsByHisUsername(String username) {
-        User student = userRepository.findByUsername(username);
-        return consultationRepository.findByStudent(student);
+        Optional<User> student = userRepository.findByUsername(username);
+        if (student.isPresent()) {
+            return consultationRepository.findByStudent(student.get());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     public Optional<Consultation> findConsultationById(String id) {

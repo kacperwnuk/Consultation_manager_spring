@@ -4,6 +4,8 @@ import com.example.pikkonsultacje.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class UserDao {
 
@@ -14,7 +16,7 @@ public class UserDao {
         this.userRepository = userRepository;
     }
 
-    public User findUserByUsername(String username) {
+    public Optional<User> findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 }

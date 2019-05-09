@@ -26,9 +26,14 @@ public class ConsultationService {
         Optional<Consultation> consultation = consultationDao.findConsultationById(consultationId);
         if (consultation.isPresent()) {
             Consultation con = consultation.get();
-            if (con.reserve(userDao.findUserByUsername(username))) {
-                consultationDao.updateConsultation(con);
-                return true;
+            Optional<User> user = userDao.findUserByUsername(username);
+            if (user.isPresent()) {
+                if (con.reserve(user.get())) {
+                    consultationDao.updateConsultation(con);
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -37,23 +42,32 @@ public class ConsultationService {
         }
     }
 
-    public void addConsultation(Consultation consultation, String username) {
-        consultation.setTutor(userDao.findUserByUsername(username));
-        consultationDao.insertConsultation(consultation);
+    public boolean addConsultation(Consultation consultation, String username) {
+        Optional<User> user = userDao.findUserByUsername(username);
+        if (user.isPresent()) {
+            consultation.setTutor(user.get());
+            consultationDao.insertConsultation(consultation);
+            return true;
+        }
+        return false;
     }
 
     public boolean cancelConsultation(String consultationId, String username) {
         Optional<Consultation> consultation = consultationDao.findConsultationById(consultationId);
         if (consultation.isPresent()) {
             Consultation con = consultation.get();
-            User user = userDao.findUserByUsername(username);
-            if (user.getRole() == Role.STUDENT) {
-                con.free();
-                consultationDao.updateConsultation(con);
-            } else if (user.getRole() == Role.TUTOR) {
-                consultationDao.deleteConsultation(con);
+            Optional<User> user = userDao.findUserByUsername(username);
+            if (user.isPresent()) {
+                if (user.get().getRole() == Role.STUDENT) {
+                    con.free();
+                    consultationDao.updateConsultation(con);
+                } else if (user.get().getRole() == Role.TUTOR) {
+                    consultationDao.deleteConsultation(con);
+                }
+                return true;
+            } else {
+                return false;
             }
-            return true;
         } else {
             return false;
         }

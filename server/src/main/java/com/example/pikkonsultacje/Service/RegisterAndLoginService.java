@@ -27,12 +27,11 @@ public class RegisterAndLoginService {
     }
 
     private Boolean usernameAlreadyUsed(String username) {
-        User user = userRepository.findByUsername(username);
-        return user != null;
+        return userRepository.findByUsername(username).isPresent();
     }
 
     public Role getUserRole(String login) throws Exception {
-        User user = userRepository.findByUsername(login);
+        User user = userRepository.findByUsername(login).get();
         Role role = user.getRole();
         if (role == null) {
             throw new Exception("There is no user with this login!");

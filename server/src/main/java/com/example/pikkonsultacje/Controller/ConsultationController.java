@@ -44,10 +44,14 @@ public class ConsultationController {
      * @return
      */
     @PostMapping("/consultation")
-    public ResponseEntity<String> addConsultation(@RequestBody Consultation consultation, @RequestParam String tutorUsername) {
+    public ResponseEntity<Boolean> addConsultation(@RequestBody Consultation consultation, @RequestParam String tutorUsername) {
         consultation.setStatus(Status.FREE);
-        consultationService.addConsultation(consultation, tutorUsername);
-        return new ResponseEntity<>("", HttpStatus.OK);
+        boolean status = consultationService.addConsultation(consultation, tutorUsername);
+        if (status) {
+            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/reserveConsultation")
