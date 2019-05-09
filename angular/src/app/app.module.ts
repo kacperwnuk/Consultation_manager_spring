@@ -14,10 +14,6 @@ import { MainRegisteredComponent } from './rejestration/main-registered/main-reg
 import { RejestrationModule } from './rejestration/rejestration.module';
 import { LogowanieComponent } from './login/logowanie/logowanie.component';
 
-const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch:'full' },
-
-];
 
 @NgModule({
   declarations: [
@@ -27,7 +23,6 @@ const routes: Routes = [
     BrowserModule,
     AppRoutingModule,
     RouterModule,
-    RouterModule.forRoot(routes),
     HttpClientModule,
     ToastrModule.forRoot(),
     LoginModule,

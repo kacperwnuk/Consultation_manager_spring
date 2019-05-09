@@ -30,9 +30,9 @@ export class MainRegisteredComponent implements OnInit {
     this.http.post<User>(url, this.user, {
       observe: 'response',
       responseType: 'json'
-    }).subscribe(response =>{
+    }).subscribe(response => {
       console.log(response);
-      this.router.navigate(['registered', response.body.username]);
+      this.router.navigate(['registered', response.body.username], {skipLocationChange: true});
     },
     error =>{
       alert("Rejestracja nie powiodła się!");
