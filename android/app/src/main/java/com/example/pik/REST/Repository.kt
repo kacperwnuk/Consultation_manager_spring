@@ -2,6 +2,8 @@ package com.example.pik.REST
 
 import android.content.Context
 import android.os.AsyncTask.execute
+import com.example.pik.CredentialsStore.password
+import com.example.pik.CredentialsStore.username
 import com.example.pik.REST.entity.Consultation
 import com.example.pik.REST.entity.User
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -9,19 +11,23 @@ import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.net.URL
+import java.nio.charset.StandardCharsets
 import java.security.KeyManagementException
 import java.security.KeyStore
 import java.security.NoSuchAlgorithmException
 import java.security.cert.CertificateFactory
+import java.util.*
 import java.util.concurrent.Callable
 import java.util.concurrent.FutureTask
 import javax.net.ssl.*
 
 
+
+
 class Repository(context: Context) {
 
-    //    private val endpointUrl = "https://192.168.0.11:8443"
-    private val endpointUrl = "https://192.168.1.16:8443"
+    private val endpointUrl = "https://192.168.0.11:8443"
+//    private val endpointUrl = "https://192.168.43.27:8443"
 
     init {
         val certificateFactory = CertificateFactory.getInstance("X.509")
@@ -64,6 +70,8 @@ class Repository(context: Context) {
                 myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
                 myConnection.requestMethod = "GET"
                 myConnection.setRequestProperty("Accept", "application/json")
+                val encoded = Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
+                myConnection.setRequestProperty("Authorization", "Basic $encoded")
 
                 if (myConnection.responseCode == 200) {
                     val responseBody = myConnection.inputStream
@@ -93,6 +101,8 @@ class Repository(context: Context) {
                 myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
                 myConnection.requestMethod = "GET"
                 myConnection.setRequestProperty("Accept", "application/json")
+                val encoded = Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
+                myConnection.setRequestProperty("Authorization", "Basic $encoded")
 
                 if (myConnection.responseCode == 200) {
                     val responseBody = myConnection.inputStream
@@ -170,6 +180,37 @@ class Repository(context: Context) {
                     response.append(inputLine)
                 }
                 `in`.close()
+                return true
+            }
+            return false
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    fun login(username: String, password: String): Boolean {
+        try {
+            val url = URL("$endpointUrl/login")
+            val myConnection = url.openConnection() as HttpsURLConnection
+            myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
+            myConnection.requestMethod = "GET"
+            myConnection.setRequestProperty("Accept", "application/json")
+            myConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+            val encoded = Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
+            myConnection.setRequestProperty("Authorization", "Basic $encoded")
+
+            val responseCode = myConnection.responseCode
+            if (responseCode == 200) {
+                val `in` = BufferedReader(InputStreamReader(myConnection.inputStream))
+                var inputLine = `in`.readLine()
+                val response = StringBuffer()
+
+                while (inputLine != null) {
+                    inputLine = `in`.readLine()
+                    response.append(inputLine)
+                }
+                `in`.close()
+                println(response.toString())
                 return true
             }
             return false
