@@ -1,0 +1,56 @@
+POST - Change password
+must include basic authorization
+logged user must match user in request
+https://localhost:8443/user/changePassword/test_user8
+
+BODY
+{
+  "oldPassword": "haslo",
+  "newPassword": "haslo2",
+  "newPasswordRepeat": "haslo2"
+}
+
+GET - Get user role
+must include basic authorization
+https://localhost:8443/login
+
+POST - Add consultation
+must include basic authorization
+logged user must match user in request
+https://localhost:8443/consultation?tutorUsername=test_user2
+
+BODY
+{
+	"date": "2019-04-25T12:30:50.420",
+	"consultationStartTime": "2019-04-25T12:30:50.422",
+	"consultationEndTime": "2019-04-25T14:30:50.422",
+	"room": "101"
+}
+
+GET - Request all consultations of user
+must include basic authorization
+logged user must match user in request
+https://localhost:8443/consultation/test_user7
+
+POST - Registration
+https://localhost:8443/register
+
+BODY
+{
+    "name": "test",
+    "surname": "user",
+    "username": "test_user",
+    "password": "haslo",
+    "enabled": "true",
+    "role": "TUTOR"
+}
+
+GET - Reserve consultation
+must include basic authorization
+logged user must match user in request
+https://localhost:8443/reserveConsultation?consultationId=5cd4a02c90887e908c517ef0&username=test_user8
+
+GET - Cancel consultation
+must include basic authorization
+logged user must match user in request
+https://localhost:8443/cancelConsultation?consultationId=5cd4a02c90887e908c517ef0&username=test_user8
