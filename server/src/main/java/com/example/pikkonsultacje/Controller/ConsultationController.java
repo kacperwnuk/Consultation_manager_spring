@@ -7,6 +7,7 @@ import com.example.pikkonsultacje.Entity.Consultation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class ConsultationController {
         this.consultationService = consultationService;
     }
 
+    @PreAuthorize("#studentUsername == authentication.name")
     @GetMapping("/consultation/{studentUsername}")
     public ResponseEntity<List<Consultation>> getUsersConsultations(@PathVariable String studentUsername) {
         List<Consultation> consultations = consultationDao.findStudentsConsultationsByHisUsername(studentUsername);
@@ -54,6 +56,7 @@ public class ConsultationController {
         }
     }
 
+    @PreAuthorize("#username == authentication.name")
     @GetMapping("/reserveConsultation")
     public ResponseEntity<Boolean> reserveConsultation(@RequestParam String consultationId, @RequestParam String username) {
         boolean status = consultationService.reserveConsultation(consultationId, username);
@@ -64,6 +67,7 @@ public class ConsultationController {
         }
     }
 
+    @PreAuthorize("#username == authentication.name")
     @GetMapping("/cancelConsultation")
     public ResponseEntity<Boolean> cancelConsultation(@RequestParam String consultationId, @RequestParam String username) {
         boolean status = consultationService.cancelConsultation(consultationId, username);

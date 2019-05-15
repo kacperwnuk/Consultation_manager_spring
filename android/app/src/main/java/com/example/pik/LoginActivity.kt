@@ -3,6 +3,7 @@ package com.example.pik
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
+import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Build
@@ -12,9 +13,11 @@ import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import com.example.pik.REST.Repository
 import com.example.pik.data.CredentialsManager
 import com.google.android.gms.auth.api.credentials.Credential
 import kotlinx.android.synthetic.main.activity_login.*
+import java.lang.ref.WeakReference
 
 
 /**
@@ -51,7 +54,7 @@ class LoginActivity : AppCompatActivity(), CredentialsManager.RetrieveCredential
     override fun login(credential: Credential) {
         this.credential = credential
         showProgress(true)
-        mAuthTask = UserLoginTask(credential.id, credential.password!!)
+        mAuthTask = UserLoginTask(credential.id, credential.password!!, this)
         mAuthTask!!.execute(null as Void?)
     }
 
@@ -102,7 +105,7 @@ class LoginActivity : AppCompatActivity(), CredentialsManager.RetrieveCredential
                 .setPassword(passwordStr)
                 .build()
             showProgress(true)
-            mAuthTask = UserLoginTask(loginStr, passwordStr)
+            mAuthTask = UserLoginTask(loginStr, passwordStr, this)
             mAuthTask!!.execute(null as Void?)
         }
     }
@@ -146,34 +149,22 @@ class LoginActivity : AppCompatActivity(), CredentialsManager.RetrieveCredential
     }
 
 
-
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) :
+    inner class UserLoginTask internal constructor(
+        private val mEmail: String,
+        private val mPassword: String,
+        context: Context
+    ) :
         AsyncTask<Void, Void, Boolean>() {
 
+        private val context: WeakReference<Context> = WeakReference(context)
+
         override fun doInBackground(vararg params: Void): Boolean? {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(200)
-            } catch (e: InterruptedException) {
-                return false
-            }
-
-            credentialsManager.saveCredentials(mEmail, mPassword)
-
-            return DUMMY_CREDENTIALS
-                .map { it.split(":") }
-                .firstOrNull { it[0] == mEmail }
-                ?.let {
-                    // Account exists, return true if the password matches.
-                    it[1] == mPassword
-                }
-                ?: true
+            val repository = Repository(context.get()!!)
+            return repository.login(mEmail, mPassword)
         }
 
         override fun onPostExecute(success: Boolean?) {
@@ -181,6 +172,9 @@ class LoginActivity : AppCompatActivity(), CredentialsManager.RetrieveCredential
             showProgress(false)
 
             if (success!!) {
+                credentialsManager.saveCredentials(mEmail, mPassword)
+                CredentialsStore.username = mEmail
+                CredentialsStore.password = mPassword
                 val mainActivityIntent = Intent(applicationContext, MainActivity::class.java)
                 mainActivityIntent.putExtra("Credential", credential)
                 mainActivityIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP

@@ -27,6 +27,7 @@ public class RegisterAndLoginController {
      * @return User role.
      */
     @GetMapping("/login")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<String> login(Principal principal) {
 
         Role userRole;
