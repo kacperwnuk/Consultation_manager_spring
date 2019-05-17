@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.List;
 
 @RestController
@@ -33,6 +34,17 @@ public class UserController {
             }
         } else {
             return new ResponseEntity<>("Passwords don't match", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("#tutorUsername == authentication.name")
+    @GetMapping("/user/activateStudent")
+    public ResponseEntity<String> activateStudentAccount(@RequestParam String tutorUsername, @RequestParam String studentUsername){
+        boolean status = userService.activateAccount(studentUsername);
+        if (status){
+            return new ResponseEntity<>("Account activated successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User doesn't exist", HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.pikkonsultacje.Entity;
 
+import com.example.pikkonsultacje.Dto.UserClientInfo;
 import com.example.pikkonsultacje.Enum.Status;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -18,9 +19,9 @@ public class Consultation {
     @Id
     private String id;
 
-    private User tutor;
+    private UserClientInfo tutor;
 
-    private User student;
+    private UserClientInfo student;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime date;
@@ -51,7 +52,7 @@ public class Consultation {
     public boolean reserve(User user) {
         if (student == null ) {
             status = Status.RESERVED;
-            student = user;
+            student = new UserClientInfo(user);
             return true;
         } else {
             return false;

@@ -3,5 +3,6 @@ package com.example.pikkonsultacje.Enum;
 public enum Status {
 
     FREE,
-    RESERVED
+    RESERVED,
+    CREATED_BY_STUDENT
 }

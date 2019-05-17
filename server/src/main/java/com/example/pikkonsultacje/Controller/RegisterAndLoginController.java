@@ -3,6 +3,7 @@ package com.example.pikkonsultacje.Controller;
 import com.example.pikkonsultacje.Entity.User;
 import com.example.pikkonsultacje.Enum.Role;
 import com.example.pikkonsultacje.Service.RegisterAndLoginService;
+import com.mongodb.lang.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+
+import static com.sun.xml.internal.ws.policy.sourcemodel.wspolicy.XmlToken.Optional;
 
 @RestController
 public class RegisterAndLoginController {
@@ -53,6 +56,7 @@ public class RegisterAndLoginController {
         try {
             service.registerUser(user);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 

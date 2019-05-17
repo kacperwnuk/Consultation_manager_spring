@@ -41,4 +41,16 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public boolean activateAccount(String studentUsername) {
+        Optional<User> user = dao.findByUsername(studentUsername);
+        if (user.isPresent()){
+            User student = user.get();
+            student.setEnabled(true);
+            dao.save(student);
+            return true;
+        }
+        return false;
+    }
 }

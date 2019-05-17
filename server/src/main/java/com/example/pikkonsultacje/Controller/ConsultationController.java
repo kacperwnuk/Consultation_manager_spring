@@ -46,7 +46,7 @@ public class ConsultationController {
      * @return
      */
     @PostMapping("/consultation")
-    public ResponseEntity<Boolean> addConsultation(@RequestBody Consultation consultation, @RequestParam String tutorUsername) {
+    public ResponseEntity<Boolean> addConsultationCreatedByTutor(@RequestBody Consultation consultation, @RequestParam String tutorUsername) {
         consultation.setStatus(Status.FREE);
         boolean status = consultationService.addConsultation(consultation, tutorUsername);
         if (status) {
@@ -55,6 +55,25 @@ public class ConsultationController {
             return new ResponseEntity<>(Boolean.FALSE, HttpStatus.BAD_REQUEST);
         }
     }
+
+
+    /***
+     * Adding new consultation to db
+     * @param consultation
+     * @return
+     */
+    @PostMapping("/studentConsultation")
+    public ResponseEntity<Boolean> addConsultationCreatedByStudent(@RequestBody Consultation consultation, @RequestParam String studentUsername, @RequestParam String tutorUsername) {
+        consultation.setStatus(Status.FREE);
+        boolean status = consultationService.addConsultationCreatedByStudent(consultation, studentUsername, tutorUsername);
+        if (status) {
+            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/reserveConsultation")
