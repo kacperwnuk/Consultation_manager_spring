@@ -4,6 +4,7 @@ import com.example.pikkonsultacje.Entity.Consultation;
 import com.example.pikkonsultacje.Entity.User;
 import com.example.pikkonsultacje.Enum.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -13,13 +14,15 @@ import java.util.Optional;
 @Component
 public class ConsultationDao {
 
+    private MongoTemplate mongoTemplate;
     private ConsultationRepository consultationRepository;
     private UserRepository userRepository;
 
     @Autowired
-    public ConsultationDao(ConsultationRepository consultationRepository, UserRepository userRepository) {
+    public ConsultationDao(ConsultationRepository consultationRepository, UserRepository userRepository, MongoTemplate mongoTemplate) {
         this.consultationRepository = consultationRepository;
         this.userRepository = userRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
     public List<Consultation> findAllConsultations() {
@@ -54,4 +57,6 @@ public class ConsultationDao {
     public List<Consultation> findFreeConsultations() {
         return consultationRepository.findByStatus(Status.FREE);
     }
+
+    public MongoTemplate getMongoTemplate(){return mongoTemplate;}
 }

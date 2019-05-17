@@ -1,6 +1,7 @@
 package com.example.pikkonsultacje.Controller;
 
 import com.example.pikkonsultacje.Dao.ConsultationDao;
+import com.example.pikkonsultacje.Dto.ConsultationSearchForm;
 import com.example.pikkonsultacje.Enum.Status;
 import com.example.pikkonsultacje.Service.ConsultationService;
 import com.example.pikkonsultacje.Entity.Consultation;
@@ -100,6 +101,14 @@ public class ConsultationController {
     @GetMapping("/freeConsultations")
     public ResponseEntity<List<Consultation>> getFreeConsultations() {
         List<Consultation> consultations = consultationDao.findFreeConsultations();
+        return new ResponseEntity<>(consultations, HttpStatus.OK);
+    }
+
+    @PreAuthorize("#username == authentication.name")
+    @PostMapping("/searchConsultations")
+    public ResponseEntity<List<Consultation>> getConsultationsUsingCriteria(@RequestBody ConsultationSearchForm consultationSearchForm, @RequestParam String username){
+        List<Consultation> consultations = consultationService.findConsultations(consultationSearchForm);
+        System.out.println(consultationSearchForm);
         return new ResponseEntity<>(consultations, HttpStatus.OK);
     }
 }
