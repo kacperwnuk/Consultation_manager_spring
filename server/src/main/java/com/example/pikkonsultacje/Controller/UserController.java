@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -53,12 +54,11 @@ public class UserController {
     @GetMapping("/user/inactiveStudents")
     public ResponseEntity<List<UserClientInfo>> showInactiveStudents(@RequestParam String tutorUsername) {
         boolean status = userService.checkIfTutor(tutorUsername);
+        List<UserClientInfo> inactiveStudents = new LinkedList<>();
         if (status) {
-            List<UserClientInfo> inactiveStudents = userService.getInactiveStudents();
-            return new ResponseEntity<>(inactiveStudents, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+             inactiveStudents = userService.getInactiveStudents();
         }
+        return new ResponseEntity<>(inactiveStudents, HttpStatus.OK);
     }
 
     @PreAuthorize("#username == authentication.name")

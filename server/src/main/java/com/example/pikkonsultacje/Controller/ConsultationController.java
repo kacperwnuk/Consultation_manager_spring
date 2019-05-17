@@ -108,7 +108,6 @@ public class ConsultationController {
     @PostMapping("/searchConsultations")
     public ResponseEntity<List<Consultation>> getConsultationsUsingCriteria(@RequestBody ConsultationSearchForm consultationSearchForm, @RequestParam String username){
         List<Consultation> consultations = consultationService.findConsultations(consultationSearchForm);
-        System.out.println(consultationSearchForm);
         return new ResponseEntity<>(consultations, HttpStatus.OK);
     }
 }
