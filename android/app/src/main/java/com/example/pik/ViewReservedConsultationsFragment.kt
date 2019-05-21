@@ -99,10 +99,14 @@ class ViewReservedConsultationsFragment : Fragment(),
     }
 
     fun updateView(result: RecyclerView.Adapter<RecyclerView.ViewHolder>) {
-        view!!.recyclerView.apply {
-            setHasFixedSize(true)
-            adapter = result
-            layoutManager = LinearLayoutManager(context)
+        try {
+            view!!.recyclerView.apply {
+                setHasFixedSize(true)
+                adapter = result
+                layoutManager = LinearLayoutManager(context)
+            }
+        } catch (e: NullPointerException) {
+
         }
         swipe_container.isRefreshing = false
     }

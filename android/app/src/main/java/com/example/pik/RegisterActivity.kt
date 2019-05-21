@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import com.example.pik.REST.Enum.Role
@@ -29,7 +28,6 @@ class RegisterActivity : AppCompatActivity() {
      * Keep track of the registration task to ensure we can cancel it if requested.
      */
     private var mRegisterTask: UserRegisterTask? = null
-    private var lecturers = listOf("L1", "L2", "L3", "L4")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +40,6 @@ class RegisterActivity : AppCompatActivity() {
             }
             return@OnEditorActionListener false
         })
-
-        lecturers_spinner.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lecturers)
 
         register_button.setOnClickListener { attemptRegister() }
     }
@@ -109,7 +105,7 @@ class RegisterActivity : AppCompatActivity() {
             // perform the user login attempt.
             showProgress(true)
             val registrationForm =
-                RegistrationForm(emailStr, passwordStr, nameStr, surnameStr, lecturers_spinner.selectedItem.toString())
+                RegistrationForm(emailStr, passwordStr, nameStr, surnameStr)
             mRegisterTask = UserRegisterTask(registrationForm, this)
             mRegisterTask!!.execute(null as Void?)
         }
@@ -174,9 +170,12 @@ class RegisterActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: Void): Boolean? {
             val repository = Repository(context.get()!!)
             val user = User()
-            user.username = registrationForm.get()!!.email
-            user.password = registrationForm.get()!!.password
+            val registrationForm = registrationForm.get()!!
+            user.username = registrationForm.email
+            user.password = registrationForm.password
             user.role = Role.STUDENT
+            user.name = registrationForm.name
+            user.surname = registrationForm.surname
             return repository.register(user)
         }
 

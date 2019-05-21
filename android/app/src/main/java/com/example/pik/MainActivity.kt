@@ -17,13 +17,14 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     ReserveConsultationFragment.ActionListener,
-    ViewReservedConsultationsFragment.ActionListener {
+    ViewReservedConsultationsFragment.ActionListener, SettingsFragment.OnFragmentInteractionListener {
 
     var credential: Credential? = null
     private lateinit var repository: Repository
 
     private lateinit var reserveConsultationFragment: ReserveConsultationFragment
     private lateinit var viewReservedConsultationsFragment: ViewReservedConsultationsFragment
+    private lateinit var settingsFragment: SettingsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         supportActionBar!!.title = getString(R.string.consultation_reservation_title)
 
-        reserveConsultationFragment = ReserveConsultationFragment.newInstance("", "")
+        reserveConsultationFragment = ReserveConsultationFragment.newInstance()
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, reserveConsultationFragment).commit()
 
         val toggle = ActionBarDrawerToggle(
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.find_consultation -> {
-                reserveConsultationFragment = ReserveConsultationFragment.newInstance("", "")
+                reserveConsultationFragment = ReserveConsultationFragment.newInstance()
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, reserveConsultationFragment)
                     .addToBackStack(null).commit()
                 supportActionBar!!.title = getString(R.string.consultation_reservation_title)
@@ -88,7 +89,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportActionBar!!.title = getString(R.string.my_consultations_title)
             }
             R.id.settings -> {
-
+                settingsFragment = SettingsFragment.newInstance()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, settingsFragment)
+                    .addToBackStack(null).commit()
+                supportActionBar!!.title = getString(R.string.settings_title)
             }
             R.id.log_out -> {
                 CredentialsManager(this).deleteCredentials(credential)
@@ -118,5 +123,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } catch (e: Exception) {
             Toast.makeText(this, "Network error occurred", Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun passwordChanged() {
+        reserveConsultationFragment = ReserveConsultationFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, reserveConsultationFragment)
+            .addToBackStack(null).commit()
+        supportActionBar!!.title = getString(R.string.consultation_reservation_title)
     }
 }
