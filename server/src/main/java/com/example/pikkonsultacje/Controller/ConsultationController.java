@@ -1,6 +1,7 @@
 package com.example.pikkonsultacje.Controller;
 
 import com.example.pikkonsultacje.Dao.ConsultationDao;
+import com.example.pikkonsultacje.Dto.ConsultationSearchForm;
 import com.example.pikkonsultacje.Enum.Status;
 import com.example.pikkonsultacje.Service.ConsultationService;
 import com.example.pikkonsultacje.Entity.Consultation;
@@ -46,7 +47,7 @@ public class ConsultationController {
      * @return
      */
     @PostMapping("/consultation")
-    public ResponseEntity<Boolean> addConsultation(@RequestBody Consultation consultation, @RequestParam String tutorUsername) {
+    public ResponseEntity<Boolean> addConsultationCreatedByTutor(@RequestBody Consultation consultation, @RequestParam String tutorUsername) {
         consultation.setStatus(Status.FREE);
         boolean status = consultationService.addConsultation(consultation, tutorUsername);
         if (status) {
@@ -55,6 +56,25 @@ public class ConsultationController {
             return new ResponseEntity<>(Boolean.FALSE, HttpStatus.BAD_REQUEST);
         }
     }
+
+
+    /***
+     * Adding new consultation to db
+     * @param consultation
+     * @return
+     */
+    @PostMapping("/studentConsultation")
+    public ResponseEntity<Boolean> addConsultationCreatedByStudent(@RequestBody Consultation consultation, @RequestParam String studentUsername, @RequestParam String tutorUsername) {
+        consultation.setStatus(Status.FREE);
+        boolean status = consultationService.addConsultationCreatedByStudent(consultation, studentUsername, tutorUsername);
+        if (status) {
+            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/reserveConsultation")
@@ -81,6 +101,13 @@ public class ConsultationController {
     @GetMapping("/freeConsultations")
     public ResponseEntity<List<Consultation>> getFreeConsultations() {
         List<Consultation> consultations = consultationDao.findFreeConsultations();
+        return new ResponseEntity<>(consultations, HttpStatus.OK);
+    }
+
+    @PreAuthorize("#username == authentication.name")
+    @PostMapping("/searchConsultations")
+    public ResponseEntity<List<Consultation>> getConsultationsUsingCriteria(@RequestBody ConsultationSearchForm consultationSearchForm, @RequestParam String username){
+        List<Consultation> consultations = consultationService.findConsultations(consultationSearchForm);
         return new ResponseEntity<>(consultations, HttpStatus.OK);
     }
 }

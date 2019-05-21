@@ -12,6 +12,7 @@ import { StandardLoginComponent } from './login/standard-login/standard-login.co
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 import { MainRegisteredComponent } from './rejestration/main-registered/main-registered.component';
 import { RejestrationModule } from './rejestration/rejestration.module';
+import {StudentModule} from './student/student.module';
 import { LogowanieComponent } from './login/logowanie/logowanie.component';
 
 
@@ -27,7 +28,8 @@ import { LogowanieComponent } from './login/logowanie/logowanie.component';
     ToastrModule.forRoot(),
     LoginModule,
     CoreModule,
-    RejestrationModule
+    RejestrationModule,
+    StudentModule
   ],
   bootstrap: [AppComponent]
 })

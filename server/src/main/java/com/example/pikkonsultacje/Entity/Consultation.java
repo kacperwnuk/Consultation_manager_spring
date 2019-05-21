@@ -1,10 +1,12 @@
 package com.example.pikkonsultacje.Entity;
 
+import com.example.pikkonsultacje.Dto.UserClientInfo;
 import com.example.pikkonsultacje.Enum.Status;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,15 +14,16 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "Consultations")
 public class Consultation {
 
     @Id
     private String id;
 
-    private User tutor;
+    private UserClientInfo tutor;
 
-    private User student;
+    private UserClientInfo student;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime date;
@@ -33,7 +36,7 @@ public class Consultation {
 
     private String room;
 
-    private Status status = Status.FREE;
+    private Status status;
 
     @Override
     public String toString() {
@@ -51,7 +54,7 @@ public class Consultation {
     public boolean reserve(User user) {
         if (student == null ) {
             status = Status.RESERVED;
-            student = user;
+            student = new UserClientInfo(user);
             return true;
         } else {
             return false;

@@ -16,7 +16,7 @@ https://localhost:8443/login
 
 POST - Add consultation
 must include basic authorization
-logged user must match user in request
+logged user must match user in request and must be a tutor!
 https://localhost:8443/consultation?tutorUsername=test_user2
 
 BODY
@@ -26,6 +26,21 @@ BODY
 	"consultationEndTime": "2019-04-25T14:30:50.422",
 	"room": "101"
 }
+
+POST - Add consultation by student
+must include basic authorization
+logged user must match user in request and must be a student and given tutorUsername must be a tutor stored in db!
+https://localhost:8443/studentConsultation?tutorUsername=k&studentUsername=t
+
+BODY
+{
+"date": "2019-04-25T12:30:50.420",
+"consultationStartTime": "2019-04-25T12:30:50.422",
+"consultationEndTime": "2019-04-25T14:30:50.422",
+"room": "101"
+}
+
+
 
 GET - Request all consultations of user
 must include basic authorization
@@ -54,3 +69,37 @@ GET - Cancel consultation
 must include basic authorization
 logged user must match user in request
 https://localhost:8443/cancelConsultation?consultationId=5cdc775790887e44289ee1aa&username=test_user8
+
+
+GET - Student account activation
+must include basic auth
+tutor must match logged user
+https://localhost:8443/user/activateStudent?tutorUsername=k&studentUsername=tomek
+
+
+GET - List of inactive students
+must include basic auth
+tutor must match logged user
+https://localhost:8443/user/inactiveStudents?tutorUsername=k
+
+GET - List of tutors
+must include basic auth
+username must match logged user
+https://localhost:8443/user/tutors?username=k
+
+POST - get list of consultations
+must include basic auth
+username must match logged user
+https://localhost:8443/searchConsultations?username=k
+
+BODY
+{
+	"tutorUsername":"k",
+	"studentUsername":"l",
+	"dateStart": "2019-04-25T00:00:00.000",
+	"dateEnd": "2019-04-25T23:59:00.000",
+	"status":"FREE"
+}
+
+wszystkie są opcjonalne, tzn. można odpytać tylko tutorUsername,
+WYJĄTEK to daty - trzeba podać obie!

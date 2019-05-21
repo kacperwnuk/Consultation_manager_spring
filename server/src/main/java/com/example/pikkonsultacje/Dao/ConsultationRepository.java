@@ -15,4 +15,4 @@ interface ConsultationRepository extends MongoRepository<Consultation, String> {
     List<Consultation> findByStudent(User student);
 
     List<Consultation> findByStatus(Status status);
-}
+ }

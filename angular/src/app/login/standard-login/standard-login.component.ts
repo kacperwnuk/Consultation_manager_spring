@@ -46,7 +46,7 @@ export class StandardLoginComponent implements OnInit {
         }).subscribe(response =>{
             console.log(response);
             alert('Logowanie powiodło się!');
-            //this.router.navigate(['loged', response.body.username]);
+            this.router.navigate(['mainstudent']);
           },
           error =>{
             alert('Logowanie nie powiodło się!');
