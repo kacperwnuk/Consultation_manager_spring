@@ -26,7 +26,9 @@ public class UserController {
 
     @PreAuthorize("#userUsername == authentication.name")
     @PostMapping("/user/changePassword/{userUsername}")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<String> changePassword(@PathVariable String userUsername, @RequestBody ChangePasswordForm changePasswordForm) {
+        System.out.println("jestem tutaj w zmianei hasla");
         if (changePasswordForm.isCorrect()) {
             boolean status = userService.changePassword(userUsername, changePasswordForm.getOldPassword(), changePasswordForm.getNewPassword());
             if (status) {
