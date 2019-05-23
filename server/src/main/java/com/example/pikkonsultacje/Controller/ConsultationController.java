@@ -27,6 +27,7 @@ public class ConsultationController {
     }
 
     @PreAuthorize("#studentUsername == authentication.name")
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/consultation/{studentUsername}")
     public ResponseEntity<List<Consultation>> getUsersConsultations(@PathVariable String studentUsername) {
         List<Consultation> consultations = consultationDao.findStudentsConsultationsByHisUsername(studentUsername);
@@ -36,6 +37,7 @@ public class ConsultationController {
 
     //test
     @GetMapping("/consultations")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<List<Consultation>> getConsultations() {
         List<Consultation> consultations = consultationDao.findAllConsultations();
         return new ResponseEntity<>(consultations, HttpStatus.OK);
@@ -47,6 +49,7 @@ public class ConsultationController {
      * @return
      */
     @PostMapping("/consultation")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Boolean> addConsultationCreatedByTutor(@RequestBody Consultation consultation, @RequestParam String tutorUsername) {
         consultation.setStatus(Status.FREE);
         boolean status = consultationService.addConsultation(consultation, tutorUsername);

@@ -5,6 +5,7 @@ import {MainStudentComponent} from "./student/main-student/main-student.componen
 import {ConsultationSignComponent} from "./student/consultation-sign/consultation-sign.component";
 import {ConsultationHistoryComponent} from "./student/consultation-history/consultation-history.component";
 import {ChangePasswordComponent} from "./student/change-password/change-password.component";
+import {MainStripComponent} from './student/main-strip/main-strip.component';
 
 const routes: Routes = [
   {path: 'registered/:user', component: RegisteredPageComponent},
@@ -12,12 +13,15 @@ const routes: Routes = [
   {path: 'consultationsign/:username/:password', component: ConsultationSignComponent},
   {path: 'consultationhistory/:username/:password', component: ConsultationHistoryComponent},
   {path: 'changepass/:username/:password', component: ChangePasswordComponent},
-
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {path: 'app-main-strip/:username/:password', component: MainStripComponent},
+  { path: '', redirectTo: 'login', pathMatch: 'full'},
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  declarations: [
+    MainStripComponent
+  ],
+  exports: [RouterModule, MainStripComponent]
 })
 export class AppRoutingModule { }
