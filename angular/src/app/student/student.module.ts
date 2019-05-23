@@ -10,7 +10,6 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { ConsultationSignComponent } from './consultation-sign/consultation-sign.component';
 import { ConsultationHistoryComponent } from './consultation-history/consultation-history.component';
 import { ConsultationCreateComponent } from './consultation-create/consultation-create.component';
-import {DlDateTimePickerModule} from "angular-bootstrap-datetimepicker";
 
 const routes = [
   { path: 'mainstudent', component: MainStudentComponent},
@@ -29,7 +28,6 @@ const routes = [
     HttpClientModule,
     FormsModule,
     RouterModule.forChild(routes),
-    DlDateTimePickerModule
   ],
   exports: [
     MainStudentComponent

@@ -14,6 +14,7 @@ import { MainRegisteredComponent } from './rejestration/main-registered/main-reg
 import { RejestrationModule } from './rejestration/rejestration.module';
 import {StudentModule} from './student/student.module';
 import { LogowanieComponent } from './login/logowanie/logowanie.component';
+import {TutorModule} from './tutor/tutor.module';
 
 
 
@@ -30,7 +31,8 @@ import { LogowanieComponent } from './login/logowanie/logowanie.component';
     LoginModule,
     CoreModule,
     RejestrationModule,
-    StudentModule
+    StudentModule,
+    TutorModule,
   ],
   bootstrap: [AppComponent]
 })
