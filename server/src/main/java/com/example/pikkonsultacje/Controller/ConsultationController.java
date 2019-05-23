@@ -67,7 +67,10 @@ public class ConsultationController {
      * @return
      */
     @PostMapping("/studentConsultation")
+    @CrossOrigin(origins = "http://localhost:4200")
+
     public ResponseEntity<Boolean> addConsultationCreatedByStudent(@RequestBody Consultation consultation, @RequestParam String studentUsername, @RequestParam String tutorUsername) {
+        System.out.println("TUTAJ!!!");
         consultation.setStatus(Status.FREE);
         boolean status = consultationService.addConsultationCreatedByStudent(consultation, studentUsername, tutorUsername);
         if (status) {

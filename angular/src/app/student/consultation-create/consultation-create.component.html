@@ -1,0 +1,35 @@
+<app-main-strip></app-main-strip>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <h2>Dodawanie konsultacji</h2>
+    <hr>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <form>
+      <div class="form-group">
+        <label for="tutorInput">Wykładowca</label>
+        <input type="text" class="form-control" id="tutorInput" [(ngModel)]="tutor"  name='tutor' placeholder="Imię i nazwisko Wykładowcy"><br>
+        <label for="roomInput">Sala</label>
+        <input type="number" class="form-control" id="roomInput" [(ngModel)]="room"  name='room' placeholder="Sala"><br>
+        <label for="dateInput">Data konsultacji</label>
+        <input type="date" class="form-control" id="dateInput" [(ngModel)]="date" name='date' placeholder="Data konsultacji"><br>
+        <label for="startInput">Godzina rozpoczęcia</label>
+        <input type="time" class="form-control" id="startInput" [(ngModel)]="startTime" name='start' placeholder="Godzina rozpoczęcia"><br>
+        <label for="endInput">Godzina zakończenia</label>
+        <input type="time" class="form-control" id="endInput" [(ngModel)]="endTime" name = 'end' placeholder="Godzina zakończenia"><br>
+        <button (click)="verification() " type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i> Zaproponuj</button>
+
+      </div>
+
+    </form>  </div>
+</div>
+
+
+
+
+

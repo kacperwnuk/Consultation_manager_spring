@@ -16,6 +16,7 @@ import {StudentModule} from './student/student.module';
 import { LogowanieComponent } from './login/logowanie/logowanie.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,

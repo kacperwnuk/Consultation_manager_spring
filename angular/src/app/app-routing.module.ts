@@ -6,6 +6,7 @@ import {ConsultationSignComponent} from "./student/consultation-sign/consultatio
 import {ConsultationHistoryComponent} from "./student/consultation-history/consultation-history.component";
 import {ChangePasswordComponent} from "./student/change-password/change-password.component";
 import {MainStripComponent} from './student/main-strip/main-strip.component';
+import {ConsultationCreateComponent} from "./student/consultation-create/consultation-create.component";
 
 const routes: Routes = [
   {path: 'registered/:user', component: RegisteredPageComponent},
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path: 'consultationsign/:username/:password', component: ConsultationSignComponent},
   {path: 'consultationhistory/:username/:password', component: ConsultationHistoryComponent},
   {path: 'changepass/:username/:password', component: ChangePasswordComponent},
+  {path: 'consultationcreate/:username/:password', component: ConsultationCreateComponent},
   {path: 'app-main-strip/:username/:password', component: MainStripComponent},
   { path: '', redirectTo: 'login', pathMatch: 'full'},
 ];
