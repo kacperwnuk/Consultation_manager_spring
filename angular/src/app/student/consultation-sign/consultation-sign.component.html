@@ -1,12 +1,13 @@
 <app-main-strip></app-main-strip>
 <div *ngIf="collection.length">
-      <div *ngFor="let item of collection"  style="border: 1px solid black">
+      <div *ngFor="let item of collection; index as i"  style="border: 1px solid black" align="center">
 
         sala: {{item.room}}<br>
         tutor: {{item.tutor}}<br>
         status: {{item.status}}<br>
         od: {{item.consultationStartTime}}
-        do: {{item.consultationEndTime}}
+        do: {{item.consultationEndTime}}<br>
+        <button (click)="sign(i)" type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i>Zarezerwuj</button>
       </div>
 
 </div>

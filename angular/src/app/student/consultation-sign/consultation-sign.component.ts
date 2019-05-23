@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Principal} from '../../rejestration/resource/principal';
 import {ActivatedRoute, Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {User} from '../../rejestration/resource/user';
 import {Consultation} from '../resource/consultation';
 import {promise} from 'selenium-webdriver';
@@ -28,8 +28,33 @@ export class ConsultationSignComponent implements OnInit {
     const url = 'https://localhost:8443/consultations';
     this.http.get(url).subscribe((res: Consultation[]) => {
       this.collection = res;
-      console.log(this.collection);
-      
+      console.log(this.collection);      
     });
   }
+  
+  sign(i) {
+    console.log("Zapisujesz sie na konsultacje nr " + i);
+    let params = new HttpParams();
+    params = params.set('consultationId', this.collection[i].id);
+    params = params.set('username', this.user.username);
+    const url = 'https://localhost:8443/reserveConsultation?' + params.toString();
+    console.log(url);
+
+    this.http.get(url, {
+      headers: new HttpHeaders()
+        .set('Authorization', 'Basic ' + btoa(`${this.user.username}:${this.user.password}`)),
+      observe: 'response',
+      responseType: 'text'
+    }).subscribe(response =>{
+        console.log(response);
+        alert('Rejestracja powiodła się!');
+      },
+      error =>{
+        alert('Rejestracja nie powiodła się');
+        console.log(error);
+      } );
+  }
+
+
+
 }

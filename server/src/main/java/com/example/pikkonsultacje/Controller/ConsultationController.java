@@ -81,6 +81,7 @@ public class ConsultationController {
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/reserveConsultation")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Boolean> reserveConsultation(@RequestParam String consultationId, @RequestParam String username) {
         boolean status = consultationService.reserveConsultation(consultationId, username);
         if (status) {
