@@ -44,9 +44,8 @@ export class StandardLoginComponent implements OnInit {
             .set('Authorization', 'Basic ' + btoa(`${this.user.username}:${this.user.password}`)),
           observe: 'response',
           responseType: 'text'
-        }).subscribe(response =>{
+        }).subscribe(response => {
             console.log(response);
-            alert('Logowanie powiodło się!');
             this.redirect(response.body);
           },
           error =>{

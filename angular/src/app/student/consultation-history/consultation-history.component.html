@@ -1,4 +1,23 @@
 <app-main-strip></app-main-strip>
-<p>
-  consultation-history works!
-</p>
+<h2>Zarezerwowane konsultacje</h2>
+<hr>
+<div *ngIf="collection.length">
+  <div *ngFor="let item of collection; index as i"  class="konsultaja">
+    <p class="lab">sala:</p>
+    <p class="value">{{item.room}}</p><br>
+    <p class="lab">tutor: </p>
+    <p class="value">{{item.tutor.name}} {{item.tutor.surname}}</p><br>
+    <p class="lab">data: </p>
+    <p class="value">{{item.date | date:'dd-MM-yyyy'}}</p><br>
+    <p class="lab">od: </p>
+    <p class="value">{{item.consultationStartTime | date: 'HH:mm'}}</p>
+    <span style="margin: 3px;"></span>
+    <p class="lab">do: </p>
+    <p class="value">{{item.consultationEndTime | date: 'HH:mm'}}</p><br>
+
+    <button type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i>Rezygnuj</button>
+  </div>
+</div>
+<div *ngIf="!(collection.length)">
+  Brak konsultacji
+</div>

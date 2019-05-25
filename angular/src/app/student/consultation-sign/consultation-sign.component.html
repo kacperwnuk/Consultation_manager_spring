@@ -1,16 +1,30 @@
 <app-main-strip></app-main-strip>
+<h2>Zapis na konsultacje</h2>
+<hr>
 <div *ngIf="collection.length">
-      <div *ngFor="let item of collection; index as i"  style="border: 1px solid black" align="center">
+      <div *ngFor="let item of collection; index as i"  class="konsultaja">
+        <p class="lab">sala:</p>
+        <p class="value">{{item.room}}</p><br>
+        <p class="lab">tutor: </p>
+        <p class="value">{{item.tutor.name}} {{item.tutor.surname}}</p><br>
+        <p class="lab">status: </p>
+        <p class="value" *ngIf="item.status == 'FREE'">wolne</p>
+        <p class="value" *ngIf="item.status == 'RESERVED'">zarezerwowane</p>
+        <p class="value" *ngIf="item.status == 'CREATED_BY_STUDENT'">niepotwierdzone</p><br>
+        <p class="lab">data: </p>
+        <p class="value">{{item.date | date:'dd-MM-yyyy'}}</p><br>
+        <p class="lab">od: </p>
+        <p class="value">{{item.consultationStartTime | date: 'HH:mm'}}</p>
+        <span style="margin: 3px;"></span>
+        <p class="lab">do: </p>
+        <p class="value">{{item.consultationEndTime | date: 'HH:mm'}}</p><br>
 
-        sala: {{item.room}}<br>
-        tutor: {{item.tutor}}<br>
-        status: {{item.status}}<br>
-        od: {{item.consultationStartTime}}
-        do: {{item.consultationEndTime}}<br>
-        <button (click)="sign(i)" type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i>Zarezerwuj</button>
+        <button *ngIf="item.status == 'FREE'" (click)="sign(i)" type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i>Zarezerwuj</button>
       </div>
-
+  <br>
+  <button (click)="seeAll()" type="submit" class="btn btn-success">Zobacz wszystkie</button>
 </div>
 <div *ngIf="!(collection.length)">
-  ładowanie
+  Brak wolnych konsultacji<br>
+  <button (click)="seeAll()" type="submit" class="btn btn-success">Zobacz wszystkie</button>
 </div>

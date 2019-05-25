@@ -5,6 +5,8 @@ import {RouterModule} from "@angular/router";
 import {AppRoutingModule} from "../app-routing.module";
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
+import { MainStripTutorComponent } from './main-strip-tutor/main-strip-tutor.component';
+import { VerifyUsersComponent } from './verify-users/verify-users.component';
 
 
 const routes = [
@@ -12,7 +14,7 @@ const routes = [
 ];
 
 @NgModule({
-  declarations: [TutorCreateConsultationComponent],
+  declarations: [TutorCreateConsultationComponent, MainStripTutorComponent, VerifyUsersComponent],
   imports: [
     CommonModule,
     RouterModule,

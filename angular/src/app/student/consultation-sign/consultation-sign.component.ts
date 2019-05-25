@@ -22,16 +22,10 @@ export class ConsultationSignComponent implements OnInit {
     this.user = new Principal();
     this.user.username = this.route.snapshot.params['username'];
     this.user.password = this.route.snapshot.params['password'];
-    console.log(this.user.username);
-    console.log(this.user.password);
 
-    const url = 'https://localhost:8443/consultations';
-    this.http.get(url).subscribe((res: Consultation[]) => {
-      this.collection = res;
-      console.log(this.collection);      
-    });
+    this.seeFree();
   }
-  
+
   sign(i) {
     console.log("Zapisujesz sie na konsultacje nr " + i);
     let params = new HttpParams();
@@ -54,7 +48,23 @@ export class ConsultationSignComponent implements OnInit {
         console.log(error);
       } );
   }
+  seeAll() {
+    const url = 'https://localhost:8443/consultations';
+    this.http.get(url).subscribe((res: Consultation[]) => {
+      this.collection = res;
+      console.log(this.collection);
+      console.log(typeof this.collection[0].date);
+    });
+  }
 
+  seeFree(){
+      const url = 'https://localhost:8443/freeConsultations';
+      this.http.get(url).subscribe((res: Consultation[]) => {
+      this.collection = res;
+        console.log(this.collection);
+        console.log(typeof this.collection[0].date);
+      });
+    }
 
 
 }

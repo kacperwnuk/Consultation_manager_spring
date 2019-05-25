@@ -43,6 +43,7 @@ public class UserController {
 
     @PreAuthorize("#tutorUsername == authentication.name")
     @GetMapping("/user/activateStudent")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<String> activateStudentAccount(@RequestParam String tutorUsername, @RequestParam String studentUsername) {
         boolean status = userService.activateAccount(studentUsername);
         if (status) {
@@ -54,6 +55,7 @@ public class UserController {
 
     @PreAuthorize("#tutorUsername == authentication.name")
     @GetMapping("/user/inactiveStudents")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<List<UserClientInfo>> showInactiveStudents(@RequestParam String tutorUsername) {
         boolean status = userService.checkIfTutor(tutorUsername);
         List<UserClientInfo> inactiveStudents = new LinkedList<>();
@@ -65,6 +67,7 @@ public class UserController {
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/user/tutors")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<List<UserClientInfo>> showTutors(@RequestParam String username) {
         List<UserClientInfo> tutors = userService.getTutors();
         return new ResponseEntity<>(tutors, HttpStatus.OK);

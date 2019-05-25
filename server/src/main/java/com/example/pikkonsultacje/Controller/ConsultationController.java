@@ -95,6 +95,7 @@ public class ConsultationController {
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/cancelConsultation")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Boolean> cancelConsultation(@RequestParam String consultationId, @RequestParam String username) {
         boolean status = consultationService.cancelConsultation(consultationId, username);
         if (status) {
@@ -105,6 +106,7 @@ public class ConsultationController {
     }
 
     @GetMapping("/freeConsultations")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<List<Consultation>> getFreeConsultations() {
         List<Consultation> consultations = consultationDao.findFreeConsultations();
         return new ResponseEntity<>(consultations, HttpStatus.OK);
@@ -112,6 +114,7 @@ public class ConsultationController {
 
     @PreAuthorize("#username == authentication.name")
     @PostMapping("/searchConsultations")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<List<Consultation>> getConsultationsUsingCriteria(@RequestBody ConsultationSearchForm consultationSearchForm, @RequestParam String username){
         List<Consultation> consultations = consultationService.findConsultations(consultationSearchForm);
         return new ResponseEntity<>(consultations, HttpStatus.OK);

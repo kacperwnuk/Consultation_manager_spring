@@ -1,7 +1,21 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div class="register-box" style="text-align:center">
-    <input class="text-input" type="text" name="username" placeholder="Nazwa użytkownika" [(ngModel)]="username"><br>
-    <input class="text-input" type="password" name="password" placeholder="Hasło"  [(ngModel)]="password"><br>
-    <input class="button-input" type="submit" (click)="getOne()" value="Zarejestruj"><br>
+<h2>Rejestracja</h2>
+<form>
+  <div class="form-group">
+
+    <input type="text" class="form-control" id="name" name='name' [(ngModel)]="name"  placeholder="Imię"><br>
+
+    <input type="text" class="form-control" id="surname" name='surname' [(ngModel)]="surname"  placeholder="Nazwisko"><br>
+
+    <input type="text" class="form-control" id="username" name='username' [(ngModel)]="username"   placeholder="Nazwa użytkownika"><br>
+
+    <input type="password" class="form-control" id="password" name='password' [(ngModel)]="password"  placeholder="Hasło"><br>
+
+    <input type="password" class="form-control" id="password2" name='password2' [(ngModel)]="password2"  placeholder="Powtórz hasło"><br>
+
+    <button (click)="getOne() " type="submit" class="btn btn-success"> Zarejestruj</button>
+
   </div>
+
+</form>
   <router-outlet></router-outlet>
