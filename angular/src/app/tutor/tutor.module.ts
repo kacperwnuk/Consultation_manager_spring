@@ -7,14 +7,16 @@ import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import { MainStripTutorComponent } from './main-strip-tutor/main-strip-tutor.component';
 import { VerifyUsersComponent } from './verify-users/verify-users.component';
+import { TutorConsultationListComponent } from './tutor-consultation-list/tutor-consultation-list.component';
 
 
 const routes = [
   { path: 'tutorcreateconsultation', component: TutorCreateConsultationComponent},
+  { path: 'consultationlist', component: TutorConsultationListComponent},
 ];
 
 @NgModule({
-  declarations: [TutorCreateConsultationComponent, MainStripTutorComponent, VerifyUsersComponent],
+  declarations: [TutorCreateConsultationComponent, MainStripTutorComponent, VerifyUsersComponent, TutorConsultationListComponent],
   imports: [
     CommonModule,
     RouterModule,

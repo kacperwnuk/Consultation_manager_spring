@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import {Principal} from "../../rejestration/resource/principal";
-import {ActivatedRoute, Router} from '@angular/router';
-import {Consultation} from '../resource/consultation';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { ResourceLoader } from '@angular/compiler';
+import { Principal } from 'src/app/rejestration/resource/principal';
+import { Consultation } from 'src/app/student/resource/consultation';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Component({
-  selector: 'app-consultation-history',
-  templateUrl: './consultation-history.component.html',
-  styleUrls: ['./consultation-history.component.css']
+  selector: 'app-tutor-consultation-list',
+  templateUrl: './tutor-consultation-list.component.html',
+  styleUrls: ['./tutor-consultation-list.component.css']
 })
-export class ConsultationHistoryComponent implements OnInit {
+export class TutorConsultationListComponent implements OnInit {
   user: Principal;
   public collection: Consultation[] = [];
 
@@ -59,4 +58,5 @@ export class ConsultationHistoryComponent implements OnInit {
         console.log(error);
       } );
   }
+
 }
