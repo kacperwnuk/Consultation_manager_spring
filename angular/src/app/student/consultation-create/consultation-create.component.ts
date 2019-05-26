@@ -4,8 +4,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Consultation} from '../resource/consultation';
 import {DatePipe} from '@angular/common';
-import { registerLocaleData } from '@angular/common';
-import localePl from '@angular/common/locales/pl';
 
 
 @Component({
