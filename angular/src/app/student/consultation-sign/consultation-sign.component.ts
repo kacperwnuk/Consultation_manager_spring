@@ -53,7 +53,6 @@ export class ConsultationSignComponent implements OnInit {
     this.http.get(url).subscribe((res: Consultation[]) => {
       this.collection = res;
       console.log(this.collection);
-      console.log(typeof this.collection[0].date);
     });
   }
 
@@ -62,7 +61,6 @@ export class ConsultationSignComponent implements OnInit {
       this.http.get(url).subscribe((res: Consultation[]) => {
       this.collection = res;
         console.log(this.collection);
-        console.log(typeof this.collection[0].date);
       });
     }
 

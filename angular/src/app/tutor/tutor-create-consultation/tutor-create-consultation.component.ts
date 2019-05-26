@@ -3,6 +3,7 @@ import {Principal} from "../../rejestration/resource/principal";
 import {Consultation} from "../../student/resource/consultation";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-tutor-create-consultation',
@@ -33,8 +34,8 @@ export class TutorCreateConsultationComponent implements OnInit {
     this.konsultacja.date = data;
     const stringStart = data.toDateString() + ', ' + this.startTime;
     const stringEnd = data.toDateString() + ', ' + this.endTime;
-    this.konsultacja.consultationStartTime = new Date(stringStart);
-    this.konsultacja.consultationEndTime = new Date(stringEnd);
+    this.konsultacja.consultationStartTime = new Date(new DatePipe('en-Us').transform(new Date(stringStart),'EEE MMM dd yyyy HH:mm:ss', 'GMT+0400'));
+    this.konsultacja.consultationEndTime = new Date(new DatePipe('en-Us').transform(new Date(stringEnd),'EEE MMM dd yyyy HH:mm:ss', 'GMT+0400'));
     this.konsultacja.room = this.room;
     console.log('Pokój: ' + this.konsultacja.room);
     console.log('Data: ' + this.konsultacja.date);
