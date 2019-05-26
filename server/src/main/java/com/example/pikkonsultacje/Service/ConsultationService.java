@@ -57,10 +57,20 @@ public class ConsultationService {
                 return false;
             }
             consultation.setTutor(new UserClientInfo(user.get()));
-            consultationDao.insertConsultation(consultation);
-            return true;
+            if (date_enabled(consultation)){
+                consultationDao.insertConsultation(consultation);
+                return true;
+            }
         }
         return false;
+    }
+
+    private boolean date_enabled(Consultation consultation) {
+        ConsultationSearchForm consultationSearchForm = new ConsultationSearchForm();
+        consultationSearchForm.setDateStart(consultation.getConsultationStartTime());
+        consultationSearchForm.setDateEnd(consultation.getConsultationEndTime());
+        List<Consultation> consultations = findConsultations(consultationSearchForm);
+        return consultations.isEmpty();
     }
 
     public boolean cancelConsultation(String consultationId, String username) {
@@ -94,8 +104,10 @@ public class ConsultationService {
             consultation.setStudent(new UserClientInfo(student.get()));
             consultation.setTutor(new UserClientInfo(tutor.get()));
             consultation.setStatus(Status.CREATED_BY_STUDENT);
-            consultationDao.insertConsultation(consultation);
-            return true;
+            if (date_enabled(consultation)){
+                consultationDao.insertConsultation(consultation);
+                return true;
+            }
         }
         return false;
     }
@@ -103,6 +115,7 @@ public class ConsultationService {
     public List<Consultation> findConsultations(ConsultationSearchForm consultationSearchForm) {
 
         Criteria criteria = new Criteria();
+
 
         if (consultationSearchForm.getDateStart() != null && consultationSearchForm.getDateEnd() != null) {
             criteria = criteria.and("consultationStartTime").gte(consultationSearchForm.getDateStart()).lte(consultationSearchForm.getDateEnd());
