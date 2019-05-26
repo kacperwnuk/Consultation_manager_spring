@@ -1,10 +1,13 @@
 .konsultaja{
   text-align: center;
-  display: inline-block;
   border-radius: 20px;
   padding: 10px;
   background-color: rgba(100,100,100,.5);
   margin: 10px;
+}
+
+.pozycja{
+  display: inline-block;
 }
 
 .lab{
