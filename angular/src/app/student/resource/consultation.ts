@@ -8,3 +8,11 @@ export class Consultation {
   room: number;
   status: string;
 }
+
+export class SearchConsultation {
+	tutorUsername: string;
+	studentUsername: string;
+	dateStart: Date;
+	dateEnd: Date;
+	status: string;
+}

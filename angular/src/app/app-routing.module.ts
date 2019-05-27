@@ -10,17 +10,19 @@ import {ConsultationCreateComponent} from "./student/consultation-create/consult
 import {TutorCreateConsultationComponent} from "./tutor/tutor-create-consultation/tutor-create-consultation.component";
 import {VerifyUsersComponent} from './tutor/verify-users/verify-users.component';
 import { TutorConsultationListComponent } from './tutor/tutor-consultation-list/tutor-consultation-list.component';
+import { ConsultationArchiweComponent } from './student/consultation-archiwe/consultation-archiwe.component';
 
 const routes: Routes = [
   {path: 'registered/:user', component: RegisteredPageComponent},
   {path: 'mainstudent/:username/:password', component: MainStudentComponent},
   {path: 'consultationsign/:username/:password', component: ConsultationSignComponent},
   {path: 'consultationhistory/:username/:password', component: ConsultationHistoryComponent},
+  {path: 'consultationarchiwe/:username/:password', component:  ConsultationArchiweComponent},
   {path: 'changepass/:username/:password', component: ChangePasswordComponent},
   {path: 'consultationcreate/:username/:password', component: ConsultationCreateComponent},
   {path: 'app-main-strip/:username/:password', component: MainStripComponent},
   {path: 'tutorcreateconsultation/:username/:password', component: TutorCreateConsultationComponent},
-  { path: 'consultationlist/:username/:password', component: TutorConsultationListComponent},
+  {path: 'consultationlist/:username/:password', component: TutorConsultationListComponent},
   {path: 'verifyusers/:username/:password', component: VerifyUsersComponent},
   { path: '', redirectTo: 'login', pathMatch: 'full'},
 ];

@@ -10,6 +10,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { ConsultationSignComponent } from './consultation-sign/consultation-sign.component';
 import { ConsultationHistoryComponent } from './consultation-history/consultation-history.component';
 import { ConsultationCreateComponent } from './consultation-create/consultation-create.component';
+import { ConsultationArchiweComponent } from './consultation-archiwe/consultation-archiwe.component';
 
 const routes = [
   { path: 'mainstudent', component: MainStudentComponent},
@@ -17,10 +18,11 @@ const routes = [
   {path: 'consultationhistory', component: ConsultationHistoryComponent},
   {path: 'consultationsign', component: ConsultationSignComponent},
   {path: 'consultationcreate', component: ConsultationCreateComponent},
+  {path: 'consultationarchiwe', component:  ConsultationArchiweComponent},
 ];
 
 @NgModule({
-  declarations: [MainStudentComponent, ChangePasswordComponent, ConsultationSignComponent, ConsultationHistoryComponent, ConsultationCreateComponent],
+  declarations: [MainStudentComponent, ChangePasswordComponent, ConsultationSignComponent, ConsultationHistoryComponent, ConsultationCreateComponent, ConsultationArchiweComponent],
   imports: [
     CommonModule,
     RouterModule,
