@@ -18,14 +18,14 @@ export class ConsultationHistoryComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.user = new Principal();
+    this.user.username = this.route.snapshot.params['username'];
+    this.user.password = this.route.snapshot.params['password'];
+    
     this.reload();
   }
 
   reload(){
-    this.user = new Principal();
-    this.user.username = this.route.snapshot.params['username'];
-    this.user.password = this.route.snapshot.params['password'];
-
     const url = 'https://localhost:8443/consultations';
     this.http.get(url, {
       headers: new HttpHeaders().set('Authorization', 'Basic ' + btoa(`${this.user.username}:${this.user.password}`))}
@@ -52,7 +52,7 @@ export class ConsultationHistoryComponent implements OnInit {
     }).subscribe(response =>{
         console.log(response);
         this.reload();
-        alert('Anulowanie powiodło się!');
+        //alert('Anulowanie powiodło się!');
       },
       error =>{
         alert('Anulowanie nie powiodło się');

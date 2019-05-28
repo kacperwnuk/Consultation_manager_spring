@@ -33,13 +33,19 @@ export class ConsultationArchiweComponent implements OnInit {
     this.user.password = this.route.snapshot.params.password;
     console.log(this.user.username);
     console.log(this.user.password);
+    
     this.userName = this.user.username;
-    this.status = "FREE";
-    this.startTime = null;
-    this.endTime = null;
-    this.tutor = null;
-    this.date = null;
+    this.status = null;
+
+    this.reload();
   }
+
+reload(){
+  this.startTime = null;
+  this.endTime = null;
+  this.tutor = null;
+  this.date = null;
+}
 
   search(){
     if(this.date!=null){
@@ -51,7 +57,8 @@ export class ConsultationArchiweComponent implements OnInit {
       this.szukanie.dateEnd = new Date(new DatePipe('en-Us').transform(new Date(stringEnd),'EEE MMM dd yyyy HH:mm:ss', 'GMT+0400'));
     }
     this.szukanie.status = this.status;
-    this.szukanie = new SearchConsultation();
+    this.szukanie.tutorUsername = this.tutor;
+    this.szukanie.studentUsername = this.userName;
 
     let params = new HttpParams();
     params = params.set('username', this.user.username);
@@ -62,10 +69,12 @@ export class ConsultationArchiweComponent implements OnInit {
           .set('Authorization', 'Basic ' + btoa(`${this.user.username}:${this.user.password}`))
     }).subscribe((res: Consultation[]) => {
       this.collection = res;
+      this.reload();
       console.log(this.collection);
     },
     error =>{
       alert('Błąd przy wczytywaniu');
+      this.reload();
       console.log(error);
     });
   }
