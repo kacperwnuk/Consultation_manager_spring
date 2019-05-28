@@ -73,6 +73,20 @@ public class ConsultationService {
         return consultations.isEmpty();
     }
 
+    public boolean acceptStudentConsultation(String consultationId, String username) {
+        Optional<Consultation> consultation = consultationDao.findConsultationById(consultationId);
+        if (consultation.isPresent()){
+            Consultation cons = consultation.get();
+            if (cons.getTutor().getUsername().equals(username) && cons.getStatus() == Status.CREATED_BY_STUDENT){
+                cons.setStatus(Status.RESERVED);
+                consultationDao.updateConsultation(cons);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public boolean cancelConsultation(String consultationId, String username) {
         Optional<Consultation> consultation = consultationDao.findConsultationById(consultationId);
         if (consultation.isPresent()) {
@@ -132,5 +146,6 @@ public class ConsultationService {
         Query query = new Query(criteria);
         return consultationDao.getMongoTemplate().find(query, Consultation.class);
     }
+
 
 }

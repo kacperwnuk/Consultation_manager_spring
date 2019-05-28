@@ -80,6 +80,18 @@ public class ConsultationController {
     }
 
 
+    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/acceptConsultation")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<Boolean> acceptConsultationCreatedByStudent(@RequestParam String consultationId, @RequestParam String username){
+        boolean status = consultationService.acceptStudentConsultation(consultationId, username);
+        if (status){
+            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/reserveConsultation")
