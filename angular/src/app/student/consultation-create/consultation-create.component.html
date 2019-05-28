@@ -12,8 +12,12 @@
   <div class="col-md-6">
     <form>
       <div class="form-group">
-        <label for="tutorInput">Wykładowca</label>
-        <input type="text" class="form-control" id="tutorInput" [(ngModel)]="tutor"  name='tutor' placeholder="Imię i nazwisko Wykładowcy"><br>
+        <div class="form-group">
+          <label for="tutorSelect">Wykładowca</label>
+          <select  class="form-control" id="tutorSelect" [(ngModel)]="tutor" name="tutorSelection">
+            <option *ngFor="let tut of tutorsCollection" [value]="tut.username">{{tut.name + " " + tut.surname}}</option>
+          </select>
+        </div>
         <label for="roomInput">Sala</label>
         <input type="number" class="form-control" id="roomInput" [(ngModel)]="room"  name='room' placeholder="Sala"><br>
         <label for="dateInput">Data konsultacji</label>

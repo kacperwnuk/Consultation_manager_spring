@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Consultation} from '../resource/consultation';
 import {DatePipe} from '@angular/common';
+import {UserClientInfo} from "../resource/UserClientInfo";
 
 
 @Component({
@@ -19,6 +20,7 @@ export class ConsultationCreateComponent implements OnInit {
   endTime: string;
   tutor: string;
   room: number;
+  public tutorsCollection: UserClientInfo[] = [];
   constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
@@ -28,6 +30,19 @@ export class ConsultationCreateComponent implements OnInit {
     this.user.password = this.route.snapshot.params.password;
     console.log(this.user.username);
     console.log(this.user.password);
+
+    let params = new HttpParams();
+    params = params.set('username', this.user.username);
+    const url = 'https://localhost:8443/user/tutors?' + params.toString();
+
+    this.http.get(url, {
+      headers: new HttpHeaders()
+        .set('Authorization', 'Basic ' + btoa(`${this.user.username}:${this.user.password}`))}).subscribe((res: UserClientInfo[]) => {
+      this.tutorsCollection = res;
+      console.log(this.tutorsCollection);
+    });
+
+
   }
 
   verification() {
