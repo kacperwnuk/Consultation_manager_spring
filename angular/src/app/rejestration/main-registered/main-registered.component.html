@@ -12,8 +12,14 @@
     <input type="password" class="form-control" id="password" name='password' [(ngModel)]="password"  placeholder="Hasło"><br>
 
     <input type="password" class="form-control" id="password2" name='password2' [(ngModel)]="password2"  placeholder="Powtórz hasło"><br>
+    <div class="row" style="">
 
-    <button (click)="getOne() " type="submit" class="btn btn-success"> Zarejestruj</button>
+      <div class="col-md-1">
+        <button (click)="getOne() " type="submit" class="btn btn-success"> Zarejestruj</button><br><br>
+        <button class="btn btn-info" type="button" [routerLink]="['/login']" skipLocationChange>Powrót</button>
+    </div>
+    </div>
+
 
   </div>
 
