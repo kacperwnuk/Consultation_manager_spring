@@ -16,12 +16,13 @@ import java.security.KeyManagementException
 import java.security.KeyStore
 import java.security.NoSuchAlgorithmException
 import java.security.cert.CertificateFactory
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import java.util.concurrent.Callable
 import java.util.concurrent.FutureTask
 import javax.net.ssl.*
-
-
 
 
 class Repository(context: Context) {
@@ -70,7 +71,8 @@ class Repository(context: Context) {
                 myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
                 myConnection.requestMethod = "GET"
                 myConnection.setRequestProperty("Accept", "application/json")
-                val encoded = Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
+                val encoded =
+                    Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
                 myConnection.setRequestProperty("Authorization", "Basic $encoded")
 
                 if (myConnection.responseCode == 200) {
@@ -101,7 +103,8 @@ class Repository(context: Context) {
                 myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
                 myConnection.requestMethod = "GET"
                 myConnection.setRequestProperty("Accept", "application/json")
-                val encoded = Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
+                val encoded =
+                    Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
                 myConnection.setRequestProperty("Authorization", "Basic $encoded")
 
                 if (myConnection.responseCode == 200) {
@@ -124,12 +127,43 @@ class Repository(context: Context) {
         return future
     }
 
-    fun getFreeConsultations(): FutureTask<List<Consultation>> {
-        try {
-            return getList("/freeConsultations")
-        } catch (e: Exception) {
-            throw e
-        }
+    fun getFreeConsultations(date: Long): FutureTask<List<Consultation>> {
+        val future = FutureTask(Callable<List<Consultation>> {
+            try {
+                val url = URL("$endpointUrl/searchConsultations?username=$username")
+                val myConnection = url.openConnection() as HttpsURLConnection
+                myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
+                myConnection.requestMethod = "POST"
+                myConnection.setRequestProperty("Accept", "application/json")
+                myConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+                myConnection.doOutput = true
+                val wr = DataOutputStream(myConnection.outputStream)
+                val localDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault())
+//            wr.writeBytes(ObjectMapper().writeValueAsString(
+//                ConsultationSearchForm().apply {
+//                    dateStart = localDate
+//                    dateEnd = localDate.plusDays(1)
+//                }))
+//            wr.flush()
+//            wr.close()
+                if (myConnection.responseCode == 200) {
+                    val responseBody = myConnection.inputStream
+                    val responseBodyReader = InputStreamReader(responseBody, "UTF-8")
+                    val json = responseBodyReader.readText()
+                    val objectMapper = ObjectMapper()
+                    objectMapper.readValue(
+                        json,
+                        objectMapper.typeFactory.constructCollectionType(List::class.java, Consultation::class.java)
+                    )
+                } else {
+                    listOf<Consultation>()
+                }
+            } catch (e: Exception) {
+                throw e
+            }
+        })
+        execute(future)
+        return future
     }
 
     fun reserveConsultation(id: String, username: String): FutureTask<Boolean?> {
