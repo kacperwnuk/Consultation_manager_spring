@@ -9,9 +9,13 @@ import com.example.pikkonsultacje.Entity.User;
 import com.example.pikkonsultacje.Enum.Role;
 import com.example.pikkonsultacje.Enum.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -23,7 +27,13 @@ public class ConsultationService {
 
     private ConsultationDao consultationDao;
     private UserDao userDao;
+    private JavaMailSender mailSender;
 
+    @Autowired
+    @Qualifier("getJavaMailSender")
+    public void setMailSender(JavaMailSender mailSender){
+        this.mailSender = mailSender;
+    }
     @Autowired
     ConsultationService(ConsultationDao consultationDao, UserDao userDao) {
         this.consultationDao = consultationDao;
@@ -79,12 +89,14 @@ public class ConsultationService {
             Consultation cons = consultation.get();
             if (cons.getTutor().getUsername().equals(username) && cons.getStatus() == Status.CREATED_BY_STUDENT){
                 cons.setStatus(Status.RESERVED);
+                sendEmail(cons.getStudent(), "Twoja konsultacja\n " + cons.toString() + "\n została zaakceptowana przez wykładowcę.");
                 consultationDao.updateConsultation(cons);
                 return true;
             }
         }
         return false;
     }
+
 
 
     public boolean cancelConsultation(String consultationId, String username) {
@@ -97,6 +109,9 @@ public class ConsultationService {
                     con.free();
                     consultationDao.updateConsultation(con);
                 } else if (user.get().getRole() == Role.TUTOR) {
+                    if (con.getStudent() != null){
+                        sendEmail(con.getStudent(), "Twoja konsultacja\n " + con.toString() + "\n została odwołana.");
+                    }
                     consultationDao.deleteConsultation(con);
                 }
                 return true;
@@ -145,6 +160,19 @@ public class ConsultationService {
         }
         Query query = new Query(criteria);
         return consultationDao.getMongoTemplate().find(query, Consultation.class);
+    }
+
+
+    private void sendEmail(UserClientInfo user, String text) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(user.getUsername());
+        simpleMailMessage.setSubject("Zmiana statusu konsultacji");
+        simpleMailMessage.setText(text);
+        try{
+            this.mailSender.send(simpleMailMessage);
+        }catch(MailException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
 

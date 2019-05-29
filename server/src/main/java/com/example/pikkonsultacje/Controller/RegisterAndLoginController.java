@@ -50,17 +50,15 @@ public class RegisterAndLoginController {
      */
     @PostMapping("/register")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    public ResponseEntity<Boolean> addUser(@RequestBody User user) {
         System.out.println("Wykonanie rejestracji uzytkownika:" + user);
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        try {
-            service.registerUser(user);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-        }
+        boolean status = service.registerUser(user);
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        if (status){
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     //test

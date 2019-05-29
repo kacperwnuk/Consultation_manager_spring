@@ -12,6 +12,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @AllArgsConstructor
@@ -41,15 +42,10 @@ public class Consultation {
 
     @Override
     public String toString() {
-        return "Consultation{" +
-                "id='" + id + '\'' +
-                ", tutor='" + tutor + '\'' +
-                ", student='" + student + '\'' +
-                ", date=" + date +
-                ", consultationStartTime=" + consultationStartTime +
-                ", consultationEndTime=" + consultationEndTime +
-                ", room=" + room +
-                '}';
+        return  "Wykładowca: \n" + tutor.toString() + '\n' +
+                "Start: " + consultationStartTime.format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")) + '\n' +
+                "Koniec: " + consultationEndTime.format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")) + '\n' +
+                "Sala: " + room;
     }
 
     public boolean reserve(User user) {
