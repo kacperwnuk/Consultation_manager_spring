@@ -1,4 +1,4 @@
-package com.example.pik
+package com.example.pik.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,15 +9,21 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.example.pik.*
 import com.example.pik.REST.Repository
 import com.example.pik.data.CredentialsManager
+import com.example.pik.fragment.FindConsultationFragment
+import com.example.pik.fragment.ReserveConsultationFragment
+import com.example.pik.fragment.SettingsFragment
+import com.example.pik.fragment.ViewReservedConsultationsFragment
 import com.google.android.gms.auth.api.credentials.Credential
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     ReserveConsultationFragment.ActionListener,
-    ViewReservedConsultationsFragment.ActionListener, FindConsultationFragment.OnSearchListener,
+    ViewReservedConsultationsFragment.ActionListener,
+    FindConsultationFragment.OnSearchListener,
     SettingsFragment.OnFragmentInteractionListener {
 
     var credential: Credential? = null
@@ -38,7 +44,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, findConsultationFragment).commit()
 
         val toggle = ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            this, drawer_layout, toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
         )
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
@@ -84,7 +92,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportActionBar!!.title = getString(R.string.consultation_reservation_title)
             }
             R.id.my_consultations -> {
-                viewReservedConsultationsFragment = ViewReservedConsultationsFragment.newInstance()
+                viewReservedConsultationsFragment =
+                    ViewReservedConsultationsFragment.newInstance()
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, viewReservedConsultationsFragment)
                     .addToBackStack(null).commit()

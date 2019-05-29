@@ -1,9 +1,10 @@
-package com.example.pik
+package com.example.pik.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
 import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
@@ -12,87 +13,86 @@ import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import android.widget.Toast
-import com.example.pik.REST.Enum.Role
+import com.example.pik.CredentialsStore
+import com.example.pik.R
 import com.example.pik.REST.Repository
-import com.example.pik.REST.entity.User
-import kotlinx.android.synthetic.main.activity_register.*
+import com.example.pik.data.CredentialsManager
+import com.google.android.gms.auth.api.credentials.Credential
+import kotlinx.android.synthetic.main.activity_login.*
 import java.lang.ref.WeakReference
+
 
 /**
  * A login screen that offers login via email/password.
  */
-class RegisterActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), CredentialsManager.RetrieveCredentialsListener {
 
     /**
-     * Keep track of the registration task to ensure we can cancel it if requested.
+     * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private var mRegisterTask: UserRegisterTask? = null
+    private var mAuthTask: UserLoginTask? = null
+    private var credential: Credential? = null
+    private lateinit var credentialsManager: CredentialsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        setContentView(R.layout.activity_login)
+        credentialsManager = CredentialsManager(this)
+
         // Set up the login form.
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                attemptRegister()
+                attemptLogin()
                 return@OnEditorActionListener true
             }
-            return@OnEditorActionListener false
+            false
         })
-
-        register_button.setOnClickListener { attemptRegister() }
+        credentialsManager.attemptAutoLogin()
+        email_sign_in_button.setOnClickListener { attemptLogin() }
+        go_to_register_button.setOnClickListener { startActivity(Intent(this, RegisterActivity::class.java)) }
     }
+
+
+    override fun login(credential: Credential) {
+        this.credential = credential
+        showProgress(true)
+        mAuthTask = UserLoginTask(credential.id, credential.password!!, this)
+        mAuthTask!!.execute(null as Void?)
+    }
+
 
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private fun attemptRegister() {
-        if (mRegisterTask != null) {
+    private fun attemptLogin() {
+        if (mAuthTask != null) {
             return
         }
 
         // Reset errors.
-        email.error = null
+        login.error = null
         password.error = null
-        name.error = null
-        surname.error = null
 
         // Store values at the time of the login attempt.
-        val emailStr = email.text.toString()
+        val loginStr = login.text.toString()
         val passwordStr = password.text.toString()
-        val nameStr = name.text.toString()
-        val surnameStr = surname.text.toString()
 
         var cancel = false
         var focusView: View? = null
 
-        // Check for a valid password, if the user entered one.// Show a progress spinner, and kick off a background task to
-        // perform the user login attempt.
-        // There was an error; don't attempt login and focus the first
-        // form field with an error.
-
-
-        if (TextUtils.isEmpty(surnameStr)) {
-            surname.error = getString(R.string.error_field_required)
-            focusView = surname
-            cancel = true
-        }
-        if (TextUtils.isEmpty(nameStr)) {
-            name.error = getString(R.string.error_field_required)
-            focusView = name
-            cancel = true
-        }
+        // Check for a password
         if (TextUtils.isEmpty(passwordStr)) {
             password.error = getString(R.string.error_field_required)
             focusView = password
             cancel = true
         }
-        if (TextUtils.isEmpty(emailStr)) {
-            email.error = getString(R.string.error_field_required)
-            focusView = email
+
+        // Check for a login
+        if (TextUtils.isEmpty(loginStr)) {
+            login.error = getString(R.string.error_field_required)
+            focusView = login
             cancel = true
         }
 
@@ -103,11 +103,12 @@ class RegisterActivity : AppCompatActivity() {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+            this.credential = Credential.Builder(loginStr)
+                .setPassword(passwordStr)
+                .build()
             showProgress(true)
-            val registrationForm =
-                RegistrationForm(emailStr, passwordStr, nameStr, surnameStr)
-            mRegisterTask = UserRegisterTask(registrationForm, this)
-            mRegisterTask!!.execute(null as Void?)
+            mAuthTask = UserLoginTask(loginStr, passwordStr, this)
+            mAuthTask!!.execute(null as Void?)
         }
     }
 
@@ -122,77 +123,73 @@ class RegisterActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
 
-            register_form.visibility = if (show) View.GONE else View.VISIBLE
-            register_form.animate()
+            email_login_form.visibility = if (show) View.GONE else View.VISIBLE
+            email_login_form.animate()
                 .setDuration(shortAnimTime)
                 .alpha((if (show) 0 else 1).toFloat())
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        register_form.visibility = if (show) View.GONE else View.VISIBLE
+                        login_form.visibility = if (show) View.GONE else View.VISIBLE
                     }
                 })
 
-            register_progress.visibility = if (show) View.VISIBLE else View.GONE
-            register_progress.animate()
+            login_progress.visibility = if (show) View.VISIBLE else View.GONE
+            login_progress.animate()
                 .setDuration(shortAnimTime)
                 .alpha((if (show) 1 else 0).toFloat())
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        register_progress.visibility = if (show) View.VISIBLE else View.GONE
+                        login_progress.visibility = if (show) View.VISIBLE else View.GONE
                     }
                 })
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
-            register_progress.visibility = if (show) View.VISIBLE else View.GONE
-            register_form.visibility = if (show) View.GONE else View.VISIBLE
+            login_progress.visibility = if (show) View.VISIBLE else View.GONE
+            email_login_form.visibility = if (show) View.GONE else View.VISIBLE
         }
     }
 
-    fun registrationSuccessful() {
-        Toast.makeText(this, "Registration successful!!!", Toast.LENGTH_LONG).show()
-    }
-
-    fun registrationUnsuccessful() {
-        Toast.makeText(this, "Something went wrong!!!", Toast.LENGTH_LONG).show()
-    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    inner class UserRegisterTask internal constructor(registrationForm: RegistrationForm, context: Context) :
+    inner class UserLoginTask internal constructor(
+        private val mEmail: String,
+        private val mPassword: String,
+        context: Context
+    ) :
         AsyncTask<Void, Void, Boolean>() {
 
         private val context: WeakReference<Context> = WeakReference(context)
-        private val registrationForm: WeakReference<RegistrationForm> = WeakReference(registrationForm)
 
         override fun doInBackground(vararg params: Void): Boolean? {
             val repository = Repository(context.get()!!)
-            val user = User()
-            val registrationForm = registrationForm.get()!!
-            user.username = registrationForm.email
-            user.password = registrationForm.password
-            user.role = Role.STUDENT
-            user.name = registrationForm.name
-            user.surname = registrationForm.surname
-            return repository.register(user)
+            return repository.login(mEmail, mPassword)
         }
 
         override fun onPostExecute(success: Boolean?) {
-            mRegisterTask = null
+            mAuthTask = null
             showProgress(false)
 
             if (success!!) {
+                credentialsManager.saveCredentials(mEmail, mPassword)
+                CredentialsStore.username = mEmail
+                CredentialsStore.password = mPassword
+                val mainActivityIntent = Intent(applicationContext, MainActivity::class.java)
+                mainActivityIntent.putExtra("Credential", credential)
+                mainActivityIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(mainActivityIntent)
                 finish()
-                registrationSuccessful()
             } else {
-                registrationUnsuccessful()
+                password.error = getString(R.string.error_incorrect_password)
+                password.requestFocus()
             }
         }
 
         override fun onCancelled() {
-            mRegisterTask = null
+            mAuthTask = null
             showProgress(false)
         }
     }

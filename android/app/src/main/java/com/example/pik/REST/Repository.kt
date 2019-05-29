@@ -2,7 +2,7 @@ package com.example.pik.REST
 
 import android.content.Context
 import android.os.AsyncTask.execute
-import com.example.pik.ChangePasswordForm
+import com.example.pik.form.ChangePasswordForm
 import com.example.pik.CredentialsStore
 import com.example.pik.CredentialsStore.password
 import com.example.pik.CredentialsStore.username

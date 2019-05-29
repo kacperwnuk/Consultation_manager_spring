@@ -1,4 +1,4 @@
-package com.example.pik
+package com.example.pik.fragment
 
 
 import android.content.Context
@@ -11,8 +11,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.pik.R
 import com.example.pik.REST.Repository
 import com.example.pik.REST.entity.Consultation
+import com.example.pik.recycleadapter.FreeConsultationsRecyclerAdapter
+import com.example.pik.recycleadapter.TextRecyclerAdapter
 import kotlinx.android.synthetic.main.fragment_reserve_consultation.*
 import kotlinx.android.synthetic.main.fragment_reserve_consultation.view.*
 import java.lang.ref.WeakReference
@@ -64,7 +67,8 @@ class ReserveConsultationFragment : Fragment(),
     }
 
     fun update() {
-        MyAsyncTask(context!!, this, date!!).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null)
+        MyAsyncTask(context!!, this, date!!)
+            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null)
     }
 
     fun updateView(result: RecyclerView.Adapter<RecyclerView.ViewHolder>) {

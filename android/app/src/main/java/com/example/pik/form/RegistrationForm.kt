@@ -1,4 +1,4 @@
-package com.example.pik
+package com.example.pik.form
 
 class RegistrationForm(
     val email: String,

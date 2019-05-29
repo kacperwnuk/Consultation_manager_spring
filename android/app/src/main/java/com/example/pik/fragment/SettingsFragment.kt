@@ -1,4 +1,4 @@
-package com.example.pik
+package com.example.pik.fragment
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -13,7 +13,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.example.pik.form.ChangePasswordForm
 import com.example.pik.CredentialsStore.password
+import com.example.pik.R
 import com.example.pik.REST.Repository
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
