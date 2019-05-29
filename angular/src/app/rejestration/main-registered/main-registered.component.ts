@@ -41,7 +41,7 @@ export class MainRegisteredComponent implements OnInit {
       responseType: 'json'
     }).subscribe(response => {
       console.log(response);
-      this.router.navigate(['registered', response.body.username], {skipLocationChange: true});
+      this.router.navigate(['registered'], {skipLocationChange: true});
     },
     error =>{
       alert("Rejestracja nie powiodła się!");

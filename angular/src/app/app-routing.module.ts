@@ -14,7 +14,7 @@ import { ConsultationArchiweComponent } from './student/consultation-archiwe/con
 import { AcceptConsultationComponent } from './tutor/accept-consultation/accept-consultation.component';
 
 const routes: Routes = [
-  {path: 'registered/:user', component: RegisteredPageComponent},
+  {path: 'registered/', component: RegisteredPageComponent},
   {path: 'mainstudent/:username/:password', component: MainStudentComponent},
   {path: 'consultationsign/:username/:password', component: ConsultationSignComponent},
   {path: 'consultationhistory/:username/:password', component: ConsultationHistoryComponent},
