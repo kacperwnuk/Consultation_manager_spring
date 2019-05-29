@@ -52,6 +52,7 @@ public class RegisterAndLoginController {
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Boolean> addUser(@RequestBody User user) {
         System.out.println("Wykonanie rejestracji uzytkownika:" + user);
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         boolean status = service.registerUser(user);
 
         if (status){
