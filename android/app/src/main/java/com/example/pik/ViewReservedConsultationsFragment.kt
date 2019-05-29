@@ -79,18 +79,27 @@ class ViewReservedConsultationsFragment : Fragment(),
         private val actionListener: WeakReference<ViewReservedConsultationsFragment> = WeakReference(actionListener)
 
         override fun doInBackground(vararg params: Void): RecyclerView.Adapter<RecyclerView.ViewHolder> {
-            val consultations = try {
-                val repository = Repository(context.get()!!)
-                repository.getReservedConsultations((context.get() as MainActivity).credential!!.id).get()
-            } catch (e: Exception) {
-                listOf<Consultation>()
+            try {
+                val consultations = try {
+                    val repository = Repository(context.get()!!)
+                    repository.getReservedConsultations((context.get() as MainActivity).credential!!.id).get()
+                } catch (e: Exception) {
+                    listOf<Consultation>()
+                }
+                return if (consultations.isNotEmpty()) {
+                    return MyBookedConsultationsRecyclerAdapter(
+                        consultations.sortedWith(
+                            compareBy(
+                                { it.date },
+                                { it.consultationStartTime })
+                        ), actionListener.get()!!
+                    )
+                } else {
+                    TextRecyclerAdapter(context.get()!!.resources.getString(R.string.no_consultations_message))
+                }
+            } catch (e: java.lang.NullPointerException) {
+                return TextRecyclerAdapter("")
             }
-            return if (consultations.isNotEmpty()) {
-                return MyBookedConsultationsRecyclerAdapter(consultations.sortedWith (compareBy ({it.date}, {it.consultationStartTime})), actionListener.get()!!)
-            } else {
-                NoConsultationsRecyclerAdapter()
-            }
-
         }
 
         override fun onPostExecute(result: RecyclerView.Adapter<RecyclerView.ViewHolder>) {

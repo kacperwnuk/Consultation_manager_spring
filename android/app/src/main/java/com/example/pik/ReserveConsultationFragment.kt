@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +67,7 @@ class ReserveConsultationFragment : Fragment(),
         MyAsyncTask(context!!, this, date!!).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null)
     }
 
-    fun updateView(result: FreeConsultationsRecyclerAdapter) {
+    fun updateView(result: RecyclerView.Adapter<RecyclerView.ViewHolder>) {
         try {
             view!!.recyclerView.apply {
                 setHasFixedSize(true)
@@ -87,28 +88,36 @@ class ReserveConsultationFragment : Fragment(),
         fun reserve(id: String)
     }
 
-    private class MyAsyncTask internal constructor(context: Context, actionListener: ReserveConsultationFragment, val date: Long) :
-        AsyncTask<Void, Void, FreeConsultationsRecyclerAdapter>() {
+    private class MyAsyncTask internal constructor(
+        context: Context,
+        actionListener: ReserveConsultationFragment,
+        val date: Long
+    ) :
+        AsyncTask<Void, Void, RecyclerView.Adapter<RecyclerView.ViewHolder>>() {
 
         private val context: WeakReference<Context> = WeakReference(context)
         private val actionListener: WeakReference<ReserveConsultationFragment> = WeakReference(actionListener)
 
-        override fun doInBackground(vararg params: Void): FreeConsultationsRecyclerAdapter {
+        override fun doInBackground(vararg params: Void): RecyclerView.Adapter<RecyclerView.ViewHolder> {
             val consultations = try {
                 val repository = Repository(context.get()!!)
                 repository.getFreeConsultations(date).get()
             } catch (e: Exception) {
                 listOf<Consultation>()
             }
-            return FreeConsultationsRecyclerAdapter(
-                consultations.sortedWith(
-                    compareBy({ it.date },
-                        { it.consultationStartTime })
-                ), actionListener.get()!!
-            )
+            return if (consultations.isNotEmpty()) {
+                FreeConsultationsRecyclerAdapter(
+                    consultations.sortedWith(
+                        compareBy({ it.date },
+                            { it.consultationStartTime })
+                    ), actionListener.get()!!
+                )
+            } else {
+                TextRecyclerAdapter(context.get()!!.resources.getString(R.string.no_consultations_available_message))
+            }
         }
 
-        override fun onPostExecute(result: FreeConsultationsRecyclerAdapter) {
+        override fun onPostExecute(result: RecyclerView.Adapter<RecyclerView.ViewHolder>) {
             actionListener.get()!!.updateView(result)
         }
     }

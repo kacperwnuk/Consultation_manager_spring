@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         supportActionBar!!.title = getString(R.string.consultation_reservation_title)
 
-        reserveConsultationFragment = ReserveConsultationFragment.newInstance()
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, reserveConsultationFragment).commit()
+        findConsultationFragment = FindConsultationFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, findConsultationFragment).commit()
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
@@ -128,8 +128,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun passwordChanged() {
-        reserveConsultationFragment = ReserveConsultationFragment.newInstance()
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, reserveConsultationFragment)
+        findConsultationFragment = FindConsultationFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, findConsultationFragment)
             .addToBackStack(null).commit()
         supportActionBar!!.title = getString(R.string.consultation_reservation_title)
     }

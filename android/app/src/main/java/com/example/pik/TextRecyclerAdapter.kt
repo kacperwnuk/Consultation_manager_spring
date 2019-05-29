@@ -4,10 +4,11 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.no_consultations_message_item.view.*
 
-class NoConsultationsRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TextRecyclerAdapter(private val message: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return NoConsultationsRecyclerViewHolder(
+        return TextRecyclerViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.no_consultations_message_item, parent, false) as ConstraintLayout)
     }
@@ -17,8 +18,8 @@ class NoConsultationsRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
+        holder.itemView.message.text = message
     }
 }
 
-class NoConsultationsRecyclerViewHolder(item: ConstraintLayout): RecyclerView.ViewHolder(item)
+class TextRecyclerViewHolder(item: ConstraintLayout): RecyclerView.ViewHolder(item)

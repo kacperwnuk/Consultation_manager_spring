@@ -6,6 +6,7 @@ import com.example.pik.ChangePasswordForm
 import com.example.pik.CredentialsStore
 import com.example.pik.CredentialsStore.password
 import com.example.pik.CredentialsStore.username
+import com.example.pik.REST.Enum.Status
 import com.example.pik.REST.dto.ConsultationSearchForm
 import com.example.pik.REST.entity.Consultation
 import com.example.pik.REST.entity.User
@@ -139,16 +140,22 @@ class Repository(context: Context) {
                 myConnection.requestMethod = "POST"
                 myConnection.setRequestProperty("Accept", "application/json")
                 myConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+                val encoded =
+                    Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
+                myConnection.setRequestProperty("Authorization", "Basic $encoded")
                 myConnection.doOutput = true
                 val wr = DataOutputStream(myConnection.outputStream)
                 val localDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault())
-//            wr.writeBytes(ObjectMapper().writeValueAsString(
-//                ConsultationSearchForm().apply {
-//                    dateStart = localDate
-//                    dateEnd = localDate.plusDays(1)
-//                }))
-//            wr.flush()
-//            wr.close()
+                wr.writeBytes(
+                    ObjectMapper().writeValueAsString(
+                        ConsultationSearchForm().apply {
+                            dateStart = localDate
+                            dateEnd = localDate.plusDays(1)
+                            status = Status.FREE
+                        })
+                )
+                wr.flush()
+                wr.close()
                 if (myConnection.responseCode == 200) {
                     val responseBody = myConnection.inputStream
                     val responseBodyReader = InputStreamReader(responseBody, "UTF-8")
@@ -159,7 +166,7 @@ class Repository(context: Context) {
                         objectMapper.typeFactory.constructCollectionType(List::class.java, Consultation::class.java)
                     )
                 } else {
-                    listOf<Consultation>()
+                    listOf()
                 }
             } catch (e: Exception) {
                 throw e

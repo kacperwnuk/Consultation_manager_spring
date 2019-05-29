@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.free_consultation_item.view.*
 import java.time.format.DateTimeFormatter
 
 
-class FreeConsultationsRecyclerAdapter(
+class FreeConsultationsRecyclerAdapter (
     private val consultations: List<Consultation>,
     private val actionListener: ActionListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
