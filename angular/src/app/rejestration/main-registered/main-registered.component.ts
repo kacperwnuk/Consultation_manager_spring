@@ -13,26 +13,35 @@ export class MainRegisteredComponent implements OnInit {
   ngOnInit() {
   }
 
-  title = 'pik-app';
+  name: string;
+  surname: string;
   username: string;
   password: string;
+  password2: string;
   user: User;
   constructor(private http: HttpClient, private router: Router) {}
 
   public getOne() {
+    if (this.password !== this.password2){
+      alert("Podane hasła różnią się!");
+      return;
+    }
+
     const url = 'https://localhost:8443/register';
     this.user = new User();
+    this.user.name = this.name;
+    this.user.surname = this.surname;
     this.user.username = this.username;
     this.user.password = this.password;
     this.user.enabled = false;
     this.user.role = 1;
-
+    console.log(this.user.surname);
     this.http.post<User>(url, this.user, {
       observe: 'response',
       responseType: 'json'
     }).subscribe(response => {
       console.log(response);
-      this.router.navigate(['registered', response.body.username], {skipLocationChange: true});
+      this.router.navigate(['registered'], {skipLocationChange: true});
     },
     error =>{
       alert("Rejestracja nie powiodła się!");

@@ -27,6 +27,7 @@ public class ConsultationController {
     }
 
     @PreAuthorize("#studentUsername == authentication.name")
+    @CrossOrigin(origins = "https://localhost:4200")
     @GetMapping("/consultation/{studentUsername}")
     public ResponseEntity<List<Consultation>> getUsersConsultations(@PathVariable String studentUsername) {
         List<Consultation> consultations = consultationDao.findStudentsConsultationsByHisUsername(studentUsername);
@@ -36,6 +37,7 @@ public class ConsultationController {
 
     //test
     @GetMapping("/consultations")
+    @CrossOrigin(origins = "https://localhost:4200")
     public ResponseEntity<List<Consultation>> getConsultations() {
         List<Consultation> consultations = consultationDao.findAllConsultations();
         return new ResponseEntity<>(consultations, HttpStatus.OK);
@@ -47,6 +49,7 @@ public class ConsultationController {
      * @return
      */
     @PostMapping("/consultation")
+    @CrossOrigin(origins = "https://localhost:4200")
     public ResponseEntity<Boolean> addConsultationCreatedByTutor(@RequestBody Consultation consultation, @RequestParam String tutorUsername) {
         consultation.setStatus(Status.FREE);
         boolean status = consultationService.addConsultation(consultation, tutorUsername);
@@ -64,6 +67,8 @@ public class ConsultationController {
      * @return
      */
     @PostMapping("/studentConsultation")
+    @CrossOrigin(origins = "https://localhost:4200")
+
     public ResponseEntity<Boolean> addConsultationCreatedByStudent(@RequestBody Consultation consultation, @RequestParam String studentUsername, @RequestParam String tutorUsername) {
         consultation.setStatus(Status.FREE);
         boolean status = consultationService.addConsultationCreatedByStudent(consultation, studentUsername, tutorUsername);
@@ -75,9 +80,22 @@ public class ConsultationController {
     }
 
 
+    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/acceptConsultation")
+    @CrossOrigin(origins = "https://localhost:4200")
+    public ResponseEntity<Boolean> acceptConsultationCreatedByStudent(@RequestParam String consultationId, @RequestParam String username){
+        boolean status = consultationService.acceptStudentConsultation(consultationId, username);
+        if (status){
+            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Boolean.FALSE, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/reserveConsultation")
+    @CrossOrigin(origins = "https://localhost:4200")
     public ResponseEntity<Boolean> reserveConsultation(@RequestParam String consultationId, @RequestParam String username) {
         boolean status = consultationService.reserveConsultation(consultationId, username);
         if (status) {
@@ -89,6 +107,7 @@ public class ConsultationController {
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/cancelConsultation")
+    @CrossOrigin(origins = "https://localhost:4200")
     public ResponseEntity<Boolean> cancelConsultation(@RequestParam String consultationId, @RequestParam String username) {
         boolean status = consultationService.cancelConsultation(consultationId, username);
         if (status) {
@@ -99,6 +118,7 @@ public class ConsultationController {
     }
 
     @GetMapping("/freeConsultations")
+    @CrossOrigin(origins = "https://localhost:4200")
     public ResponseEntity<List<Consultation>> getFreeConsultations() {
         List<Consultation> consultations = consultationDao.findFreeConsultations();
         return new ResponseEntity<>(consultations, HttpStatus.OK);
@@ -106,6 +126,7 @@ public class ConsultationController {
 
     @PreAuthorize("#username == authentication.name")
     @PostMapping("/searchConsultations")
+    @CrossOrigin(origins = "https://localhost:4200")
     public ResponseEntity<List<Consultation>> getConsultationsUsingCriteria(@RequestBody ConsultationSearchForm consultationSearchForm, @RequestParam String username){
         List<Consultation> consultations = consultationService.findConsultations(consultationSearchForm);
         return new ResponseEntity<>(consultations, HttpStatus.OK);

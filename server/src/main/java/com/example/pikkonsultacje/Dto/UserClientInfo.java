@@ -26,12 +26,7 @@ public class UserClientInfo {
 
     @Override
     public String toString() {
-        return "UserClientInfo{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", username='" + username + '\'' +
-                ", role=" + role +
-                '}';
+        return  "Imię: " + name + " Nazwisko: " + surname;
     }
 
 

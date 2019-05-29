@@ -14,16 +14,24 @@ public class RegisterAndLoginService {
         this.userRepository = userRepository;
     }
 
-    public void registerUser(User user) throws Exception {
+    public boolean registerUser(User user) {
 
         if (user.getUsername() == null || user.getPassword() == null) {
-            throw new Exception("Username and password required!");
+            System.out.println("Brak username lub hasla");
+            return false;
+        }
+
+        if (!user.getUsername().matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")){
+            System.out.println("Zły mail");
+            return false;
         }
 
         if (usernameAlreadyUsed(user.getUsername())) {
-            throw new Exception("Username is already used!");
+            System.out.println("Taki użytkownik istnieje!");
+            return false;
         }
         userRepository.insert(user);
+        return true;
     }
 
     private Boolean usernameAlreadyUsed(String username) {

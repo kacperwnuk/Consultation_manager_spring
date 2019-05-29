@@ -1,0 +1,39 @@
+<app-main-strip></app-main-strip>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <h2>Dodawanie konsultacji</h2>
+    <hr>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <form>
+      <div class="form-group">
+        <div class="form-group">
+          <label for="tutorSelect">Wykładowca</label>
+          <select  class="form-control" id="tutorSelect" [(ngModel)]="tutor" name="tutorSelection">
+            <option *ngFor="let tut of tutorsCollection" [value]="tut.username">{{tut.name + " " + tut.surname}}</option>
+          </select>
+        </div>
+        <label for="roomInput">Sala</label>
+        <input type="number" class="form-control" id="roomInput" [(ngModel)]="room"  name='room' placeholder="Sala"><br>
+        <label for="dateInput">Data konsultacji</label>
+        <input type="date" class="form-control" id="dateInput" [(ngModel)]="date" name='date' placeholder="Data konsultacji"><br>
+        <label for="startInput">Godzina rozpoczęcia</label>
+        <input type="time" class="form-control" id="startInput" [(ngModel)]="startTime" name='start' placeholder="Godzina rozpoczęcia"><br>
+        <label for="endInput">Godzina zakończenia</label>
+        <input type="time" class="form-control" id="endInput" [(ngModel)]="endTime" name = 'end' placeholder="Godzina zakończenia"><br>
+        <button (click)="verification() " type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i> Zaproponuj</button>
+
+      </div>
+
+    </form>  </div>
+</div>
+
+
+
+
+

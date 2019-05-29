@@ -3,6 +3,7 @@ import { User } from '../model';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {Principal} from '../../rejestration/resource/principal';
+import {applySourceSpanToExpressionIfNeeded} from "@angular/compiler/src/output/output_ast";
 
 @Component({
     selector: 'app-standard-login',
@@ -43,10 +44,9 @@ export class StandardLoginComponent implements OnInit {
             .set('Authorization', 'Basic ' + btoa(`${this.user.username}:${this.user.password}`)),
           observe: 'response',
           responseType: 'text'
-        }).subscribe(response =>{
+        }).subscribe(response => {
             console.log(response);
-            alert('Logowanie powiodło się!');
-            //this.router.navigate(['loged', response.body.username]);
+            this.redirect(response.body);
           },
           error =>{
             alert('Logowanie nie powiodło się!');
@@ -56,5 +56,18 @@ export class StandardLoginComponent implements OnInit {
 
     forgotPassword() {
         this.shift.emit(false);
+    }
+
+    redirect(role)
+    {
+      if (role === 'STUDENT') {
+        console.log("uczen");
+        this.router.navigate(['mainstudent', this.user.username, this.user.password], {skipLocationChange: true});
+      }
+      else if ( role === 'TUTOR') {
+        console.log('wykladowca');
+        this.router.navigate(['tutorcreateconsultation', this.user.username, this.user.password], {skipLocationChange: true});
+      }
+
     }
 }

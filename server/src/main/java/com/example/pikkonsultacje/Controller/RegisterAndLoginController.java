@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-import static com.sun.xml.internal.ws.policy.sourcemodel.wspolicy.XmlToken.Optional;
+//import static com.sun.xml.internal.ws.policy.sourcemodel.wspolicy.XmlToken.Optional;
 
 @RestController
 public class RegisterAndLoginController {
@@ -30,7 +30,7 @@ public class RegisterAndLoginController {
      * @return User role.
      */
     @GetMapping("/login")
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "https://localhost:4200")
     public ResponseEntity<String> login(Principal principal) {
 
         Role userRole;
@@ -49,23 +49,22 @@ public class RegisterAndLoginController {
      * @return
      */
     @PostMapping("/register")
-    @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    @CrossOrigin(origins = "https://localhost:4200")
+    public ResponseEntity<Boolean> addUser(@RequestBody User user) {
         System.out.println("Wykonanie rejestracji uzytkownika:" + user);
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        try {
-            service.registerUser(user);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-        }
+        boolean status = service.registerUser(user);
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        if (status){
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     //test
     @GetMapping("/register")
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "https://localhost:4200")
     public ResponseEntity<User> showUser() {
         System.out.println("Wykonanie wyslania");
         return new ResponseEntity<>(new User("1", "kacper123", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT), HttpStatus.OK);

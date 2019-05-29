@@ -103,3 +103,9 @@ BODY
 
 wszystkie są opcjonalne, tzn. można odpytać tylko tutorUsername,
 WYJĄTEK to daty - trzeba podać obie!
+
+
+GET - Accept consultation
+must include basic authorization
+logged user must match user in request
+https://localhost:8443/acceptConsultation?consultationId=5cdc775790887e44289ee1aa&username=test_user8

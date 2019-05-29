@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {User} from '../resource/user';
 
 @Component({
   selector: 'app-registered-page',
@@ -13,7 +12,6 @@ export class RegisteredPageComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.user = this.route.snapshot.params['user'];
 
   }
 

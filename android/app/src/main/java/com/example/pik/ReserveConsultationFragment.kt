@@ -16,6 +16,12 @@ import kotlinx.android.synthetic.main.fragment_reserve_consultation.*
 import kotlinx.android.synthetic.main.fragment_reserve_consultation.view.*
 import java.lang.ref.WeakReference
 
+
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val DATE = "date"
+private const val ARG_PARAM2 = "param2"
+
 /**
  * A simple [Fragment] subclass.
  * Use the [ReserveConsultationFragment.newInstance] factory method to
@@ -24,6 +30,22 @@ import java.lang.ref.WeakReference
  */
 class ReserveConsultationFragment : Fragment(),
     FreeConsultationsRecyclerAdapter.ActionListener, SwipeRefreshLayout.OnRefreshListener {
+
+    // TODO: Rename and change types of parameters
+    private var date: Long? = null
+    private var param2: String? = null
+
+    private lateinit var recyclerAdapter: FreeConsultationsRecyclerAdapter
+
+    private lateinit var repository: Repository
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            date = it.getLong(DATE)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +63,7 @@ class ReserveConsultationFragment : Fragment(),
     }
 
     fun update() {
-        MyAsyncTask(context!!, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null)
+        MyAsyncTask(context!!, this, date!!).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null)
     }
 
     fun updateView(result: FreeConsultationsRecyclerAdapter) {
@@ -65,7 +87,7 @@ class ReserveConsultationFragment : Fragment(),
         fun reserve(id: String)
     }
 
-    private class MyAsyncTask internal constructor(context: Context, actionListener: ReserveConsultationFragment) :
+    private class MyAsyncTask internal constructor(context: Context, actionListener: ReserveConsultationFragment, val date: Long) :
         AsyncTask<Void, Void, FreeConsultationsRecyclerAdapter>() {
 
         private val context: WeakReference<Context> = WeakReference(context)
@@ -74,7 +96,7 @@ class ReserveConsultationFragment : Fragment(),
         override fun doInBackground(vararg params: Void): FreeConsultationsRecyclerAdapter {
             val consultations = try {
                 val repository = Repository(context.get()!!)
-                repository.getFreeConsultations().get()
+                repository.getFreeConsultations(date).get()
             } catch (e: Exception) {
                 listOf<Consultation>()
             }
@@ -96,10 +118,18 @@ class ReserveConsultationFragment : Fragment(),
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
+         * @param date Parameter 1.
+         * @param param2 Parameter 2.
          * @return A new instance of fragment reserve_consultation.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance() = ReserveConsultationFragment()
+        fun newInstance(date: Long, param2: String) =
+            ReserveConsultationFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(DATE, date)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 }

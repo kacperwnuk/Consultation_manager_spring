@@ -9,9 +9,13 @@ import com.example.pikkonsultacje.Entity.User;
 import com.example.pikkonsultacje.Enum.Role;
 import com.example.pikkonsultacje.Enum.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -23,7 +27,13 @@ public class ConsultationService {
 
     private ConsultationDao consultationDao;
     private UserDao userDao;
+    private JavaMailSender mailSender;
 
+    @Autowired
+    @Qualifier("getJavaMailSender")
+    public void setMailSender(JavaMailSender mailSender){
+        this.mailSender = mailSender;
+    }
     @Autowired
     ConsultationService(ConsultationDao consultationDao, UserDao userDao) {
         this.consultationDao = consultationDao;
@@ -57,11 +67,37 @@ public class ConsultationService {
                 return false;
             }
             consultation.setTutor(new UserClientInfo(user.get()));
-            consultationDao.insertConsultation(consultation);
-            return true;
+            if (date_enabled(consultation)){
+                consultationDao.insertConsultation(consultation);
+                return true;
+            }
         }
         return false;
     }
+
+    private boolean date_enabled(Consultation consultation) {
+        ConsultationSearchForm consultationSearchForm = new ConsultationSearchForm();
+        consultationSearchForm.setDateStart(consultation.getConsultationStartTime());
+        consultationSearchForm.setDateEnd(consultation.getConsultationEndTime());
+        List<Consultation> consultations = findConsultations(consultationSearchForm);
+        return consultations.isEmpty();
+    }
+
+    public boolean acceptStudentConsultation(String consultationId, String username) {
+        Optional<Consultation> consultation = consultationDao.findConsultationById(consultationId);
+        if (consultation.isPresent()){
+            Consultation cons = consultation.get();
+            if (cons.getTutor().getUsername().equals(username) && cons.getStatus() == Status.CREATED_BY_STUDENT){
+                cons.setStatus(Status.RESERVED);
+                sendEmail(cons.getStudent(), "Twoja konsultacja\n " + cons.toString() + "\n została zaakceptowana przez wykładowcę.");
+                consultationDao.updateConsultation(cons);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public boolean cancelConsultation(String consultationId, String username) {
         Optional<Consultation> consultation = consultationDao.findConsultationById(consultationId);
@@ -73,6 +109,9 @@ public class ConsultationService {
                     con.free();
                     consultationDao.updateConsultation(con);
                 } else if (user.get().getRole() == Role.TUTOR) {
+                    if (con.getStudent() != null){
+                        sendEmail(con.getStudent(), "Twoja konsultacja\n " + con.toString() + "\n została odwołana.");
+                    }
                     consultationDao.deleteConsultation(con);
                 }
                 return true;
@@ -94,8 +133,10 @@ public class ConsultationService {
             consultation.setStudent(new UserClientInfo(student.get()));
             consultation.setTutor(new UserClientInfo(tutor.get()));
             consultation.setStatus(Status.CREATED_BY_STUDENT);
-            consultationDao.insertConsultation(consultation);
-            return true;
+            if (date_enabled(consultation)){
+                consultationDao.insertConsultation(consultation);
+                return true;
+            }
         }
         return false;
     }
@@ -103,6 +144,7 @@ public class ConsultationService {
     public List<Consultation> findConsultations(ConsultationSearchForm consultationSearchForm) {
 
         Criteria criteria = new Criteria();
+
 
         if (consultationSearchForm.getDateStart() != null && consultationSearchForm.getDateEnd() != null) {
             criteria = criteria.and("consultationStartTime").gte(consultationSearchForm.getDateStart()).lte(consultationSearchForm.getDateEnd());
@@ -119,5 +161,19 @@ public class ConsultationService {
         Query query = new Query(criteria);
         return consultationDao.getMongoTemplate().find(query, Consultation.class);
     }
+
+
+    private void sendEmail(UserClientInfo user, String text) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(user.getUsername());
+        simpleMailMessage.setSubject("Zmiana statusu konsultacji");
+        simpleMailMessage.setText(text);
+        try{
+            this.mailSender.send(simpleMailMessage);
+        }catch(MailException ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+
 
 }
