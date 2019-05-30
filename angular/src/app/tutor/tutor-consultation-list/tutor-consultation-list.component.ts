@@ -35,7 +35,7 @@ export class TutorConsultationListComponent implements OnInit {
   }
 
   cancel(i) {
-    console.log("Zapisujesz sie na konsultacje nr " + i);
+    console.log("Anulujesz konsultacje nr " + i);
     let params = new HttpParams();
     params = params.set('consultationId', this.collection[i].id);
     params = params.set('username', this.user.username);

@@ -17,7 +17,7 @@
         <p class="value">{{item.consultationEndTime | date: 'HH:mm'}}</p><br>
         <button  (click)="cancel(i)" type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i>Anuluj</button>
     </div>
-    <div  *ngIf="(item.tutor.username == this.user.username) && (item.status != 'FREE')" class="konsultaja_zajeta">
+    <div  *ngIf="(item.tutor.username == this.user.username) && (item.status == 'RESERVED')" class="konsultaja_zajeta">
         <p class="lab">sala:</p>
         <p class="value">{{item.room}}</p><br>
         <p class="lab">student: </p>
