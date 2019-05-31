@@ -70,4 +70,30 @@ export class AcceptConsultationComponent implements OnInit {
       } );
   }
 
+  discard(i){
+    console.log("Anulujesz konsultacje nr " + i);
+    let params = new HttpParams();
+    params = params.set('consultationId', this.collection[i].id);
+    params = params.set('username', this.user.username);
+    const url = 'https://localhost:8443/cancelConsultation?' + params.toString();
+    console.log(url);
+
+    this.http.get(url, {
+      headers: new HttpHeaders()
+        .set('Authorization', 'Basic ' + btoa(`${this.user.username}:${this.user.password}`)),
+      observe: 'response',
+      responseType: 'text'
+    }).subscribe(response =>{
+        console.log(response);
+        this.reload();
+        alert('Anulowanie powiodło się!');
+      },
+      error =>{
+        alert('Anulowanie nie powiodło się');
+        console.log(error);
+      } );
+
+
+  }
+
 }
