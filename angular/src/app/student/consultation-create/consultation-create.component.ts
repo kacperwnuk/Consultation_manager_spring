@@ -28,8 +28,6 @@ export class ConsultationCreateComponent implements OnInit {
     this.konsultacja = new Consultation();
     this.user.username = this.route.snapshot.params.username;
     this.user.password = this.route.snapshot.params.password;
-    console.log(this.user.username);
-    console.log(this.user.password);
 
     let params = new HttpParams();
     params = params.set('username', this.user.username);

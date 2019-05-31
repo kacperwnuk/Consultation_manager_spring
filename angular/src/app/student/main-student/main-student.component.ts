@@ -20,7 +20,6 @@ export class MainStudentComponent implements OnInit {
     this.user = new Principal();
     this.user.username = this.route.snapshot.params['username'];
     this.user.password = this.route.snapshot.params['password'];
-    console.log(this.user.username);
   }
 
 }
