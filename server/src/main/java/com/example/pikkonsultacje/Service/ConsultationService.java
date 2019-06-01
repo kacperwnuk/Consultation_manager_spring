@@ -112,7 +112,8 @@ public class ConsultationService {
                     if (con.getStudent() != null){
                         sendEmail(con.getStudent(), "Twoja konsultacja\n " + con.toString() + "\n została odwołana.");
                     }
-                    consultationDao.deleteConsultation(con);
+                    con.cancel();
+                    consultationDao.updateConsultation(con);
                 }
                 return true;
             } else {
