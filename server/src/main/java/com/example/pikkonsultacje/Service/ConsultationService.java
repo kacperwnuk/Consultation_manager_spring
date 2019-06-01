@@ -143,9 +143,17 @@ public class ConsultationService {
     }
 
     public List<Consultation> findConsultations(ConsultationSearchForm consultationSearchForm) {
+        Query query = new Query(createCriteria(consultationSearchForm));
+        return consultationDao.getMongoTemplate().find(query, Consultation.class);
+    }
 
+    public long countConsultations(ConsultationSearchForm consultationSearchForm) {
+        Query query = new Query(createCriteria(consultationSearchForm));
+        return consultationDao.getMongoTemplate().count(query, Consultation.class);
+    }
+
+    private Criteria createCriteria(ConsultationSearchForm consultationSearchForm) {
         Criteria criteria = new Criteria();
-
 
         if (consultationSearchForm.getDateStart() != null && consultationSearchForm.getDateEnd() != null) {
             criteria = criteria.and("consultationStartTime").gte(consultationSearchForm.getDateStart()).lte(consultationSearchForm.getDateEnd());
@@ -159,8 +167,7 @@ public class ConsultationService {
         if (consultationSearchForm.getStatus() != null){
             criteria = criteria.and("status").is(consultationSearchForm.getStatus());
         }
-        Query query = new Query(criteria);
-        return consultationDao.getMongoTemplate().find(query, Consultation.class);
+        return criteria;
     }
 
 
