@@ -9,16 +9,18 @@ import { MainStripTutorComponent } from './main-strip-tutor/main-strip-tutor.com
 import { VerifyUsersComponent } from './verify-users/verify-users.component';
 import { TutorConsultationListComponent } from './tutor-consultation-list/tutor-consultation-list.component';
 import { AcceptConsultationComponent } from './accept-consultation/accept-consultation.component';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 
 const routes = [
   { path: 'tutorcreateconsultation', component: TutorCreateConsultationComponent},
   { path: 'consultationlist', component: TutorConsultationListComponent},
   { path: 'acceptconsultation', component: AcceptConsultationComponent},
+  { path: 'statistics', component: StatisticsComponent},
 ];
 
 @NgModule({
-  declarations: [TutorCreateConsultationComponent, MainStripTutorComponent, VerifyUsersComponent, TutorConsultationListComponent, AcceptConsultationComponent],
+  declarations: [TutorCreateConsultationComponent, MainStripTutorComponent, VerifyUsersComponent, TutorConsultationListComponent, AcceptConsultationComponent, StatisticsComponent],
   imports: [
     CommonModule,
     RouterModule,

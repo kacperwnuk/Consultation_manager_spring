@@ -18,6 +18,7 @@ export class MainRegisteredComponent implements OnInit {
   username: string;
   password: string;
   password2: string;
+  phoneNumber: string;
   user: User;
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -33,6 +34,7 @@ export class MainRegisteredComponent implements OnInit {
     this.user.surname = this.surname;
     this.user.username = this.username;
     this.user.password = this.password;
+    this.user.phoneNumber = this.phoneNumber;
     this.user.enabled = false;
     this.user.role = 1;
     console.log(this.user.surname);

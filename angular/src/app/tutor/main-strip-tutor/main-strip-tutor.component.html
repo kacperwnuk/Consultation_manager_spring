@@ -9,6 +9,7 @@
       <a class="nav-item nav-link active" [routerLink]="['/consultationlist', user.username, user.password]" skipLocationChange>Lista konsultacji<span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link active" [routerLink]="['/acceptconsultation', user.username, user.password]" skipLocationChange>Proponowane konsultacje<span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link active" [routerLink]="['/verifyusers', user.username, user.password]" skipLocationChange>Weryfikuj użytkowników<span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link active" [routerLink]="['/statistics', user.username, user.password]" skipLocationChange>Statystyki<span class="sr-only">(current)</span></a>
     </div>
     <div class="navbar-right navbar-nav">
       <a class="nav-item nav-link active" [routerLink]="['/login']" skipLocationChange>Wyloguj {{user.username}}<span class="sr-only">(current)</span></a>
