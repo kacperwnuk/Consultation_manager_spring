@@ -4,6 +4,7 @@ export class User {
   surname: string;
   username:string;
   password:string;
+  phoneNumber:string;
   enabled:boolean;
   role:number;
 }
