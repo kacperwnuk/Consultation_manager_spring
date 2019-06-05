@@ -15,12 +15,14 @@ public class UserClientInfo {
     private String surname;
     private String username;
     private Role role;
+    private String phoneNumber;
 
     public UserClientInfo(User user) {
         this.username = user.getUsername();
         this.role = user.getRole();
         this.name = user.getName();
         this.surname = user.getSurname();
+        this.phoneNumber = user.getPhoneNumber();
     }
 
 

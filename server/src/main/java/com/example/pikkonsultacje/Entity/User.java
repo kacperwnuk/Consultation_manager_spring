@@ -23,13 +23,15 @@ public class User {
     private String password;
     private Boolean enabled = true;
     private Role role;
+    private String phoneNumber;
 
-    public User(String id, String username, String password, Boolean enabled, Role role) {
+    public User(String id, String username, String password, Boolean enabled, Role role, String number) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.enabled = enabled;
         this.role = role;
+        this.phoneNumber = number;
     }
 
     @Override

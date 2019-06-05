@@ -24,8 +24,8 @@ public class Dao {
         this.mongoTemplate = mongoTemplate;
     }
     private List<User> users = new ArrayList<User>() {{
-        add(new User("1", "kacper", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT));
-        add(new User("2", "admin", new BCryptPasswordEncoder().encode("admin"), true, Role.TUTOR));
+        add(new User("1", "kacper", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT, "+48222222222"));
+        add(new User("2", "admin", new BCryptPasswordEncoder().encode("admin"), true, Role.TUTOR, "+48222222222"));
     }};
 
     public User findUserByUsername(String username) {

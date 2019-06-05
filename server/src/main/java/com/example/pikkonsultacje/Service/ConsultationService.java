@@ -8,9 +8,13 @@ import com.example.pikkonsultacje.Entity.Consultation;
 import com.example.pikkonsultacje.Entity.User;
 import com.example.pikkonsultacje.Enum.Role;
 import com.example.pikkonsultacje.Enum.Status;
+
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.mail.MailException;
@@ -18,7 +22,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,6 +114,7 @@ public class ConsultationService {
                 } else if (user.get().getRole() == Role.TUTOR) {
                     if (con.getStudent() != null){
                         sendEmail(con.getStudent(), "Twoja konsultacja\n " + con.toString() + "\n została odwołana.");
+//                        sendSMS(con.getStudent(),  "Twoja konsultacja\n " + con.toString() + "\n została odwołana.");
                     }
                     con.cancel();
                     consultationDao.updateConsultation(con);
@@ -181,6 +185,16 @@ public class ConsultationService {
         }catch(MailException ex){
             System.out.println(ex.getMessage());
         }
+    }
+
+    private void sendSMS(UserClientInfo user, String text){
+        Twilio.init("AC4f40f215e9c74f760db0577a5cf922dd", "022c6f1a84e84e033a6f2ca78e5a3f70");
+        /*Message message = Message.creator(
+                new PhoneNumber(user.getPhoneNumber()),
+                new PhoneNumber("+48732484082"),
+                text)
+                .create();
+    */
     }
 
 
