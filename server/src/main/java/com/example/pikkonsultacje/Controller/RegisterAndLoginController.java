@@ -67,7 +67,7 @@ public class RegisterAndLoginController {
     @CrossOrigin(origins = "https://localhost:4200")
     public ResponseEntity<User> showUser() {
         System.out.println("Wykonanie wyslania");
-        return new ResponseEntity<>(new User("1", "kacper123", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT), HttpStatus.OK);
+        return new ResponseEntity<>(new User("1", "kacper123", new BCryptPasswordEncoder().encode("wnuk"), true, Role.STUDENT, "+48222222222"), HttpStatus.OK);
     }
 
     //test

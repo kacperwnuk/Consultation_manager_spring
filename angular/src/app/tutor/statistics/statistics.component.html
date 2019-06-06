@@ -1,0 +1,29 @@
+<app-main-strip-tutor></app-main-strip-tutor>
+
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <h2>Statystyki</h2>
+    <hr>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <form>
+      <div class="form-group">
+        <label for="tutorInput">Student</label>
+        <input type="text" class="form-control" id="studentInput" [(ngModel)]="student"  name='student' placeholder="Imię i nazwisko Studenta"><br>
+        <label for="dateInput">Data Od:</label>
+        <input type="date" class="form-control" id="dateInput" [(ngModel)]="dateStart" name='dateStart' placeholder="Data Początku Wyszukiwania"><br>
+        <label for="dateInput">Data Do:</label>
+        <input type="date" class="form-control" id="dateInput" [(ngModel)]="dateEnd" name='dateEnd' placeholder="Data Końca Wyszukiwania"><br>
+        <button (click)="search() " type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i> Szukaj</button>
+
+      </div>
+
+    </form>  </div>
+</div>
+
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>

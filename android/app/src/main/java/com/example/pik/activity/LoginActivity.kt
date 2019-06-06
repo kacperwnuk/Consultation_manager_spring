@@ -1,4 +1,4 @@
-package com.example.pik
+package com.example.pik.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -13,6 +13,8 @@ import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import com.example.pik.CredentialsStore
+import com.example.pik.R
 import com.example.pik.REST.Repository
 import com.example.pik.data.CredentialsManager
 import com.google.android.gms.auth.api.credentials.Credential
@@ -190,13 +192,5 @@ class LoginActivity : AppCompatActivity(), CredentialsManager.RetrieveCredential
             mAuthTask = null
             showProgress(false)
         }
-    }
-
-    companion object {
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
     }
 }

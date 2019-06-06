@@ -2,8 +2,12 @@ package com.example.pik.REST
 
 import android.content.Context
 import android.os.AsyncTask.execute
+import com.example.pik.form.ChangePasswordForm
+import com.example.pik.CredentialsStore
 import com.example.pik.CredentialsStore.password
 import com.example.pik.CredentialsStore.username
+import com.example.pik.REST.Enum.Status
+import com.example.pik.REST.dto.ConsultationSearchForm
 import com.example.pik.REST.entity.Consultation
 import com.example.pik.REST.entity.User
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -136,16 +140,22 @@ class Repository(context: Context) {
                 myConnection.requestMethod = "POST"
                 myConnection.setRequestProperty("Accept", "application/json")
                 myConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+                val encoded =
+                    Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
+                myConnection.setRequestProperty("Authorization", "Basic $encoded")
                 myConnection.doOutput = true
                 val wr = DataOutputStream(myConnection.outputStream)
                 val localDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault())
-//            wr.writeBytes(ObjectMapper().writeValueAsString(
-//                ConsultationSearchForm().apply {
-//                    dateStart = localDate
-//                    dateEnd = localDate.plusDays(1)
-//                }))
-//            wr.flush()
-//            wr.close()
+                wr.writeBytes(
+                    ObjectMapper().writeValueAsString(
+                        ConsultationSearchForm().apply {
+                            dateStart = localDate
+                            dateEnd = localDate.plusDays(1)
+                            status = Status.FREE
+                        })
+                )
+                wr.flush()
+                wr.close()
                 if (myConnection.responseCode == 200) {
                     val responseBody = myConnection.inputStream
                     val responseBodyReader = InputStreamReader(responseBody, "UTF-8")
@@ -156,7 +166,7 @@ class Repository(context: Context) {
                         objectMapper.typeFactory.constructCollectionType(List::class.java, Consultation::class.java)
                     )
                 } else {
-                    listOf<Consultation>()
+                    listOf()
                 }
             } catch (e: Exception) {
                 throw e
@@ -183,11 +193,48 @@ class Repository(context: Context) {
     }
 
     fun getReservedConsultations(username: String): FutureTask<List<Consultation>> {
-        try {
-            return getList("/consultation/$username")
-        } catch (e: Exception) {
-            throw e
-        }
+        val future = FutureTask(Callable<List<Consultation>> {
+            try {
+                val url = URL("$endpointUrl/searchConsultations?username=$username")
+                val myConnection = url.openConnection() as HttpsURLConnection
+                myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
+                myConnection.requestMethod = "POST"
+                myConnection.setRequestProperty("Accept", "application/json")
+                myConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+                val encoded = Base64.getEncoder()
+                    .encodeToString("${CredentialsStore.username}:$password".toByteArray(StandardCharsets.UTF_8))
+                myConnection.setRequestProperty("Authorization", "Basic $encoded")
+                myConnection.doOutput = true
+                val wr = DataOutputStream(myConnection.outputStream)
+                val searchForm = ConsultationSearchForm().apply {
+                    studentUsername = username
+                    dateStart = LocalDateTime.now()
+                    dateEnd = LocalDateTime.now().plusYears(1)
+                }
+                val mapper = ObjectMapper()
+                wr.writeBytes(mapper.writeValueAsString(searchForm))
+                wr.flush()
+                wr.close()
+                val responseCode = myConnection.responseCode
+                if (responseCode == 200) {
+                    val responseBody = myConnection.inputStream
+                    val responseBodyReader = InputStreamReader(responseBody, "UTF-8")
+                    val json = responseBodyReader.readText()
+                    val objectMapper = ObjectMapper()
+                    objectMapper.readValue<List<Consultation>>(
+                        json,
+                        objectMapper.typeFactory.constructCollectionType(List::class.java, Consultation::class.java)
+                    )
+                } else {
+                    listOf()
+                }
+
+            } catch (e: Exception) {
+                throw e
+            }
+        })
+        execute(future)
+        return future
     }
 
     fun register(user: User): Boolean {
@@ -245,6 +292,40 @@ class Repository(context: Context) {
                 }
                 `in`.close()
                 println(response.toString())
+                return true
+            }
+            return false
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    fun changePassword(changePasswordForm: ChangePasswordForm): Boolean {
+        try {
+            val url = URL("$endpointUrl/user/changePassword/$username")
+            val myConnection = url.openConnection() as HttpsURLConnection
+            myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1")
+            myConnection.requestMethod = "POST"
+            myConnection.setRequestProperty("Accept", "application/json")
+            myConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+            val encoded = Base64.getEncoder().encodeToString("$username:$password".toByteArray(StandardCharsets.UTF_8))
+            myConnection.setRequestProperty("Authorization", "Basic $encoded")
+            myConnection.doOutput = true
+            val wr = DataOutputStream(myConnection.outputStream)
+            wr.writeBytes(ObjectMapper().writeValueAsString(changePasswordForm))
+            wr.flush()
+            wr.close()
+            val responseCode = myConnection.responseCode
+            if (responseCode == 200) {
+                val `in` = BufferedReader(InputStreamReader(myConnection.inputStream))
+                var inputLine = `in`.readLine()
+                val response = StringBuffer()
+
+                while (inputLine != null) {
+                    inputLine = `in`.readLine()
+                    response.append(inputLine)
+                }
+                `in`.close()
                 return true
             }
             return false

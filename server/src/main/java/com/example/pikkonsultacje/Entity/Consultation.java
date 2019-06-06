@@ -58,6 +58,10 @@ public class Consultation {
         }
     }
 
+    public void cancel() {
+        status = Status.CANCELLED;
+    }
+
     public void free() {
         student = null;
         status = Status.FREE;

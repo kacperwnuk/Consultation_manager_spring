@@ -131,4 +131,12 @@ public class ConsultationController {
         List<Consultation> consultations = consultationService.findConsultations(consultationSearchForm);
         return new ResponseEntity<>(consultations, HttpStatus.OK);
     }
+
+    @PreAuthorize("#username == authentication.name")
+    @PostMapping("/countConsultations")
+    @CrossOrigin(origins = "https://localhost:4200")
+    public ResponseEntity<Long> countConsultationsUsingCriteria(@RequestBody ConsultationSearchForm consultationSearchForm, @RequestParam String username){
+        long consultationsCount = consultationService.countConsultations(consultationSearchForm);
+        return new ResponseEntity<>(consultationsCount, HttpStatus.OK);
+    }
 }

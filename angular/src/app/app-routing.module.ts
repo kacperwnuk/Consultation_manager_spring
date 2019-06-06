@@ -12,6 +12,7 @@ import {VerifyUsersComponent} from './tutor/verify-users/verify-users.component'
 import { TutorConsultationListComponent } from './tutor/tutor-consultation-list/tutor-consultation-list.component';
 import { ConsultationArchiweComponent } from './student/consultation-archiwe/consultation-archiwe.component';
 import { AcceptConsultationComponent } from './tutor/accept-consultation/accept-consultation.component';
+import { StatisticsComponent } from './tutor/statistics/statistics.component';
 
 const routes: Routes = [
   {path: 'registered/', component: RegisteredPageComponent},
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path: 'app-main-strip/:username/:password', component: MainStripComponent},
   {path: 'tutorcreateconsultation/:username/:password', component: TutorCreateConsultationComponent},
   {path: 'consultationlist/:username/:password', component: TutorConsultationListComponent},
+  {path: 'statistics/:username/:password', component: StatisticsComponent},
   {path: 'acceptconsultation/:username/:password', component: AcceptConsultationComponent},
   {path: 'verifyusers/:username/:password', component: VerifyUsersComponent},
   { path: '', redirectTo: 'login', pathMatch: 'full'},

@@ -1,4 +1,4 @@
-package com.example.pik
+package com.example.pik.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.pik.R
 import kotlinx.android.synthetic.main.fragment_find_consultation.view.*
 import java.util.*
 

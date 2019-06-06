@@ -17,8 +17,6 @@ export class MainStripComponent implements OnInit {
     this.user = new Principal();
     this.user.username = this.route.snapshot.params['username'];
     this.user.password = this.route.snapshot.params['password'];
-    console.log(this.user.username);
-    console.log(this.user.password);
   }
 
 }

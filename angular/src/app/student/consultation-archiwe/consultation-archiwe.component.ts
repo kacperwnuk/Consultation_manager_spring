@@ -31,8 +31,6 @@ export class ConsultationArchiweComponent implements OnInit {
     this.szukanie = new SearchConsultation();
     this.user.username = this.route.snapshot.params.username;
     this.user.password = this.route.snapshot.params.password;
-    console.log(this.user.username);
-    console.log(this.user.password);
     
     this.userName = this.user.username;
     this.status = null;
