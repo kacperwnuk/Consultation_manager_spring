@@ -15,6 +15,16 @@ public class User {
     private Boolean enabled = false;
     private Role role;
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    private String phoneNumber;
+
     public User() {
     }
 

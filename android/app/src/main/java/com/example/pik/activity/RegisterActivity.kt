@@ -61,12 +61,14 @@ class RegisterActivity : AppCompatActivity() {
         password.error = null
         name.error = null
         surname.error = null
+        phone_number.error = null
 
         // Store values at the time of the login attempt.
         val emailStr = email.text.toString()
         val passwordStr = password.text.toString()
         val nameStr = name.text.toString()
         val surnameStr = surname.text.toString()
+        val phoneNumberStr = phone_number.text.toString()
 
         var cancel = false
         var focusView: View? = null
@@ -97,6 +99,11 @@ class RegisterActivity : AppCompatActivity() {
             focusView = email
             cancel = true
         }
+        if (TextUtils.isEmpty(phoneNumberStr)) {
+            email.error = getString(R.string.error_field_required)
+            focusView = phone_number
+            cancel = true
+        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -107,7 +114,7 @@ class RegisterActivity : AppCompatActivity() {
             // perform the user login attempt.
             showProgress(true)
             val registrationForm =
-                RegistrationForm(emailStr, passwordStr, nameStr, surnameStr)
+                RegistrationForm(emailStr, passwordStr, nameStr, surnameStr, phoneNumberStr)
             mRegisterTask = UserRegisterTask(registrationForm, this)
             mRegisterTask!!.execute(null as Void?)
         }
@@ -178,6 +185,7 @@ class RegisterActivity : AppCompatActivity() {
             user.role = Role.STUDENT
             user.name = registrationForm.name
             user.surname = registrationForm.surname
+            user.phoneNumber = registrationForm.phoneNumber
             return repository.register(user)
         }
 

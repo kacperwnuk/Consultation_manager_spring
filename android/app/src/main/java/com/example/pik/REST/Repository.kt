@@ -2,7 +2,6 @@ package com.example.pik.REST
 
 import android.content.Context
 import android.os.AsyncTask.execute
-import com.example.pik.form.ChangePasswordForm
 import com.example.pik.CredentialsStore
 import com.example.pik.CredentialsStore.password
 import com.example.pik.CredentialsStore.username
@@ -10,6 +9,7 @@ import com.example.pik.REST.Enum.Status
 import com.example.pik.REST.dto.ConsultationSearchForm
 import com.example.pik.REST.entity.Consultation
 import com.example.pik.REST.entity.User
+import com.example.pik.form.ChangePasswordForm
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -31,8 +31,8 @@ import javax.net.ssl.*
 
 class Repository(context: Context) {
 
-    private val endpointUrl = "https://192.168.0.11:8443"
-//    private val endpointUrl = "https://192.168.43.27:8443"
+//    private val endpointUrl = "https://192.168.0.11:8443"
+    private val endpointUrl = "https://192.168.43.27:8443"
 
     init {
         val certificateFactory = CertificateFactory.getInstance("X.509")
