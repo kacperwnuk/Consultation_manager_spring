@@ -24,7 +24,7 @@ export class StatisticsComponent implements OnInit {
   status: string;
   public activeGraph: boolean;
 
-  miesiac: number[] = [];
+  miesiac: number[] = [0,0,0,0,0,0,0,0,0,0,0,0];
 
   public collection: Consultation[] = [];
 
@@ -80,6 +80,7 @@ export class StatisticsComponent implements OnInit {
       this.collection = res;
       this.reload();
       console.log(this.collection);
+      this.generateGraph();
     },
     error =>{
       alert('Błąd przy wczytywaniu');
@@ -90,7 +91,7 @@ export class StatisticsComponent implements OnInit {
 
   generateGraph(){
     for (const iterator of this.collection) {
-      this.miesiac[iterator.date.getMonth()]++;
+      this.miesiac[new Date(new DatePipe('en-Us').transform(new Date(iterator.date),'EEE MMM dd yyyy HH:mm:ss', 'GMT+0400')).getMonth()]++;
     }
 
     var chart = new CanvasJS.Chart("chartContainer", {
