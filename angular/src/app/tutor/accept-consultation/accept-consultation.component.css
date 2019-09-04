@@ -1,0 +1,31 @@
+.konsultaja_wolna{
+    text-align: center;
+    border-radius: 20px;
+    padding: 10px;
+    background-color: rgba(32,150,0,.5);
+    margin: 10px;
+  }
+
+.konsultaja_zajeta{
+  text-align: center;
+  border-radius: 20px;
+  padding: 10px;
+  background-color: rgba(150, 127, 0, 0.5);
+  margin: 10px;
+}
+
+.pozycja{
+  display: inline-block;
+}
+
+.lab{
+  display: inline-block;
+  font-weight: bold;
+  color: white;
+  margin-right: 2px;
+}
+.value{
+  display: inline-block;
+  color: white;
+}
+  

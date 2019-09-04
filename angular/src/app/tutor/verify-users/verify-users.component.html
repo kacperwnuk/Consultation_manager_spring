@@ -1,0 +1,19 @@
+<app-main-strip-tutor></app-main-strip-tutor>
+<h2>Weryfikacja użytkowników</h2>
+<hr>
+<div *ngIf="collection.length">
+  <div *ngFor="let item of collection; index as i"  class="konsultaja">
+    <p class="lab">imię:</p>
+    <p class="value">{{item.name}}</p><br>
+    <p class="lab">nazwisko: </p>
+    <p class="value">{{item.surname}}</p><br>
+    <p class="lab">nazwa użytkownika: </p>
+    <p class="value">{{item.username}}</p><br>
+
+    <button (click)="verify(item)" type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i>Zatwierdź</button>
+  </div>
+  <br>
+</div>
+<div *ngIf="!(collection.length)">
+  Brak użytkowników niezweryfikowanych<br>
+</div>

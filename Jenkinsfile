@@ -7,14 +7,18 @@ pipeline {
         CI = 'true'
     }
     stages {
-        stage('Build') {
+        stage('Build backend') {
             steps {
-                sh "mvn -DskipTests clean install"
+				dir ('server') {
+					sh "mvn -DskipTests clean install"
+				}
             }
         }
         stage('Test') {
             steps {
-                sh "mvn test"
+				dir ('server') {
+					sh "mvn test"
+				}
             }
             post {
                 always {
@@ -24,15 +28,27 @@ pipeline {
         }
         stage('Deliver') {
             steps {
-                archiveArtifacts artifacts: 'target/*.war', fingerprint: true
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
-        stage('Deploy') {
+        stage('Deploy backend') {
             when {
                 branch 'development'
             }
             steps {
-                sh "/home/mzyzynsk/jenkins/scripts/deploy_master.sh"
+				dir ('server') {
+					sh "/home/mzyzynsk/jenkins/scripts/deploy_backend.sh"
+				}
+            }
+        }
+		stage('Deploy frontend') {
+            when {
+                branch 'development'
+            }
+            steps {
+				dir ('angular') {
+					sh "/home/mzyzynsk/jenkins/scripts/deploy_frontend.sh"
+				}
             }
         }
     }

@@ -1,0 +1,19 @@
+.konsultaja{
+  text-align: center;
+  display: inline-block;
+  border-radius: 20px;
+  padding: 10px;
+  background-color: rgba(100,100,100,.5);
+  margin: 10px;
+}
+
+.lab{
+  display: inline-block;
+  font-weight: bold;
+  color: white;
+  margin-right: 2px;
+}
+.value{
+  display: inline-block;
+  color: white;
+}
